@@ -88,7 +88,7 @@ public class Bomber extends Character {
         if (_input.space && _timeBetweenPutBombs < 0 && Game.getBombRate() > 0)
         {
             placeBomb(getXTile(), getYTile());
-            _timeBetweenPutBombs = 0;
+            _timeBetweenPutBombs = 15;
             Game.addBombRate(-1);
         }
     }

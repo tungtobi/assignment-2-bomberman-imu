@@ -14,6 +14,7 @@ import uet.oop.bomberman.entities.tile.destroyable.Brick;
 import uet.oop.bomberman.entities.tile.Wall;
 import uet.oop.bomberman.entities.tile.item.Item;
 import uet.oop.bomberman.entities.bomb.Flame;
+import uet.oop.bomberman.entities.bomb.FlameSegment;
 import uet.oop.bomberman.entities.character.enemy.Enemy;
 import uet.oop.bomberman.level.Coordinates;
 
@@ -94,12 +95,8 @@ public class Bomber extends Character {
 
     protected void placeBomb(int x, int y) {
         // TODO: thực hiện tạo đối tượng bom, đặt vào vị trí (x, y)
-        _board.addEntity(y * _board.getWidth() + x, 
-            new LayeredEntity(x, y,
-                new Grass(x, y, Sprite.grass),
-                new Bomb(x, y, _board)
-            )
-        );
+        Bomb bomb = new Bomb(x, y, _board);
+        _board.addBomb(bomb);
     }
 
     private void clearBombs() {
@@ -137,8 +134,7 @@ public class Bomber extends Character {
         double bomberSpeed = Game.getBomberSpeed();
         double xa = _x + ((_input.left ? 1: 0) * -1 + (_input.right ? 1 : 0)) * bomberSpeed;
         double ya = _y + ((_input.up ? 1 : 0) * -1 + (_input.down ? 1 : 0)) * bomberSpeed;
-        if (xa != _x || ya != _y)
-            _moving = true;
+        _moving = (xa != _x) || (ya != _y);
         move(xa, ya);
         if (!_moving)
         {
@@ -151,13 +147,11 @@ public class Bomber extends Character {
                 _x = Coordinates.tileToPixel(tileX) + BOMBER_BEAUTY / 2;
 
             int tileY = Coordinates.pixelToTile(_y);
-            if ((tileY + 1) * tilesSize * 1.0  - _y < 2.0)
+            if ((tileY + 1) * tilesSize * 1.0  - _y < 2.5)
                 _y = Coordinates.tileToPixel(tileY + 1);
-            if (_y - tileY * tilesSize * 1.0 < 2.0)
+            if (_y - tileY * tilesSize * 1.0 < 2.5)
                 _y = Coordinates.tileToPixel(tileY);
         }
-
-        _moving = false;
     }
 
     @Override
@@ -179,7 +173,7 @@ public class Bomber extends Character {
         // System.out.println((x + spriteSize) + ", " + (y - spriteSize) + ": " + entityTopRight);
         // END DEBUG
 
-        if (!(collide(entityBottomRight) || collide(entityBottomLeft) || collide(entityTopLeft) || collide(entityTopRight)))
+        if (collide(entityBottomRight) && collide(entityBottomLeft) && collide(entityTopLeft) && collide(entityTopRight))
             return true;
 
         return false;
@@ -211,18 +205,21 @@ public class Bomber extends Character {
     public boolean collide(Entity e) {
         // TODO: xử lý va chạm với Flame
         // TODO: xử lý va chạm với Enemy
-        if (e instanceof LayeredEntity && ((LayeredEntity) e).getTopEntity() instanceof Bomb)
+
+        if (e instanceof Flame)
         {
-            return e.collide(this);
+            this.kill();
+            return false;
         }
-        if (e instanceof Flame || e instanceof Enemy)
+        else if (e instanceof Enemy)
         {
             this.kill();
             return true;
         }
-        if (e instanceof Item || e instanceof Grass || e instanceof Portal || e instanceof Bomber)
+        else if (e instanceof Bomber)
             return false;
-        return true;
+
+        return e.collide(this);
     }
 
     private void chooseSprite() {
@@ -258,5 +255,10 @@ public class Bomber extends Character {
                 }
                 break;
         }
+    }
+
+    public int getBomberBeauty()
+    {
+        return BOMBER_BEAUTY;
     }
 }

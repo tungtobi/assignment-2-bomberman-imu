@@ -3,6 +3,7 @@ package uet.oop.bomberman.entities.bomb;
 import uet.oop.bomberman.Board;
 import uet.oop.bomberman.entities.Entity;
 import uet.oop.bomberman.graphics.Screen;
+import uet.oop.bomberman.entities.character.Character;
 
 public class Flame extends Entity {
 
@@ -39,7 +40,6 @@ public class Flame extends Entity {
 		 */
 		int numberOfSegments = calculatePermitedDistance();
 		_flameSegments = new FlameSegment[numberOfSegments];
-
 		/**
 		 * biến last dùng để đánh dấu cho segment cuối cùng
 		 */
@@ -51,16 +51,15 @@ public class Flame extends Entity {
 		if 		(_direction == 0) dy = -1;
 		else if (_direction == 1) dx =  1;
 		else if (_direction == 2) dy =  1;
-		else if (_direction == 4) dx = -1;
+		else if (_direction == 3) dx = -1;
 
-		for (int i = 0; i < numberOfSegments - 1; i++)
+		for (int i = 0; i < numberOfSegments; i++)
 		{
+			last = i == numberOfSegments - 1;
 			int xt = (int) (_x + dx * (i + 1));
 			int yt = (int) (_y + dy * (i + 1));
-			_flameSegments[i] = new FlameSegment(xt, yt, _direction, false);
+			_flameSegments[i] = new FlameSegment(xt, yt, _direction, last);
 		}
-
-		_flameSegments[numberOfSegments - 1] = new FlameSegment((int) (_x + dx * (numberOfSegments - 1)), (int) (_y + dy *(numberOfSegments - 1)), _direction, true);
 	}
 
 	/**
@@ -69,7 +68,26 @@ public class Flame extends Entity {
 	 */
 	private int calculatePermitedDistance() {
 		// TODO: thực hiện tính toán độ dài của Flame
-		return 1;
+		int radius = 0;
+		int x = (int)_x;
+		int y = (int)_y;
+		while(radius < _radius) {
+			if(_direction == 0) y--;
+			if(_direction == 1) x++;
+			if(_direction == 2) y++;
+			if(_direction == 3) x--;
+			
+			Entity a = _board.getEntity(x, y, null);
+
+			if (a instanceof Character) radius++;
+			
+			if (a.collide(this) == false) 
+				break;
+			
+			radius++;
+		}
+		return radius;
+
 	}
 	
 	public FlameSegment flameSegmentAt(int x, int y) {
@@ -93,6 +111,10 @@ public class Flame extends Entity {
 	@Override
 	public boolean collide(Entity e) {
 		// TODO: xử lý va chạm với Bomber, Enemy. Chú ý đối tượng này có vị trí chính là vị trí của Bomb đã nổ
+		if (e instanceof Character) {
+			((Character) e).kill();
+			return false;
+		}
 		return true;
 	}
 }

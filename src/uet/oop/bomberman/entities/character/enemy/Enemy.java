@@ -6,6 +6,7 @@ import uet.oop.bomberman.Game;
 import uet.oop.bomberman.entities.Entity;
 import uet.oop.bomberman.entities.Message;
 import uet.oop.bomberman.entities.bomb.Flame;
+import uet.oop.bomberman.entities.bomb.FlameSegment;
 import uet.oop.bomberman.entities.tile.Grass;
 import uet.oop.bomberman.entities.tile.Portal;
 import uet.oop.bomberman.entities.character.Bomber;
@@ -90,15 +91,13 @@ public abstract class Enemy extends Character {
 		else if (_direction == 1) xa += _speed;
 		else if (_direction == 2) ya += _speed;
 		else if (_direction == 3) xa -= _speed;
+		_moving = (xa != 0) || (ya != 0);
 		if (canMove(_x + xa, _y + ya))
 		{
-			_moving = true;
 			move(xa, ya);
-			_moving = false;
 		}
 		else
 			_direction = _ai.calculateDirection();
-
 	}
 	
 	@Override
@@ -118,7 +117,7 @@ public abstract class Enemy extends Character {
         Entity entityTopLeft     = _board.getEntity(Coordinates.pixelToTile(x), Coordinates.pixelToTile(y - spriteSize), this);
         Entity entityTopRight    = _board.getEntity(Coordinates.pixelToTile(x + spriteSize - 1), Coordinates.pixelToTile(y - spriteSize), this);
 
-        if (!(collide(entityBottomRight) || collide(entityBottomLeft) || collide(entityTopLeft) || collide(entityTopRight)))
+        if (collide(entityBottomRight) && collide(entityBottomLeft) && collide(entityTopLeft) && collide(entityTopRight))
             return true;
         return false;
 	}
@@ -130,11 +129,18 @@ public abstract class Enemy extends Character {
 		if (e instanceof Flame)
 		{
 			this.kill();
-            return true;
+			return false;
 		}
-		if (e instanceof Item || e instanceof Grass || e instanceof Portal || e instanceof Bomber)
-            return false;
-        return true;
+
+		if (e instanceof Bomber)
+		{
+			((Bomber)e).kill();
+			return true;
+		}
+
+		if (e instanceof Enemy)
+			return false;
+		return e.collide(this);
 	}
 	
 	@Override

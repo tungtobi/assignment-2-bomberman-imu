@@ -53,6 +53,11 @@ public abstract class Character extends AnimatedEntitiy {
 	 */
 	protected abstract boolean canMove(double x, double y);
 
+	public int getDirection()
+	{
+		return this._direction;
+	}
+
 	protected double getXMessage() {
 		return (_x * Game.SCALE) + (_sprite.SIZE / 2 * Game.SCALE);
 	}

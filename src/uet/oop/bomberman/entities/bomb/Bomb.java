@@ -109,25 +109,23 @@ public class Bomb extends AnimatedEntitiy {
         // TODO: xử lý khi Bomber đi ra sau khi vừa đặt bom (_allowedToPassThru)
         // TODO: xử lý va chạm với Flame của Bomb khác
 
-		if (e instanceof Bomber)
+		if (e instanceof Bomber && _allowedToPassThru)
 		{
-			if (!_allowedToPassThru)
-				return true;
-			else
+			int bomberSize = e.getSprite().getSize();
+			boolean bottomLeftCheck = Coordinates.pixelToTile(e.getX()) != (int) _x || Coordinates.pixelToTile(e.getY() - 1) != (int) _y;
+			boolean topRightCheck = Coordinates.pixelToTile(e.getX() + bomberSize - 1 - ((Bomber) e).getBomberBeauty()) != (int) _x || Coordinates.pixelToTile(e.getY() - bomberSize) != (int) _y;
+
+			if (bottomLeftCheck && topRightCheck)
 			{
-				if (Coordinates.pixelToTile(e.getX()) != (int) _x || Coordinates.pixelToTile(e.getY() - 1) != (int) _y)
-				{
-					_allowedToPassThru = false;
-					return true;
-				}
+				_allowedToPassThru = false;
 				return false;
 			}
+			return true;
 		}
 
         if (e instanceof Flame)
         {
         	this.explode();
-        	return true;
         }
         return false;
 	}

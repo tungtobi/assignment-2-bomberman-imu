@@ -35,9 +35,7 @@ public class LayeredEntity extends Entity {
 	
 	@Override
 	public void render(Screen screen) {
-		for (Entity en : _entities)
-			en.render(screen);
-		// getTopEntity().render(screen);
+		getTopEntity().render(screen);
 	}
 	
 	public Entity getTopEntity() {

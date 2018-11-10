@@ -23,7 +23,7 @@ import java.util.List;
 
 public class Bomber extends Character {
 
-    private final int BOMBER_BEAUTY = 4;
+    private final int BOMBER_BEAUTY = 0;
 
     private List<Bomb> _bombs;
     protected Keyboard _input;
@@ -49,8 +49,10 @@ public class Bomber extends Character {
             return;
         }
 
-        if (_timeBetweenPutBombs < -7500) _timeBetweenPutBombs = 0;
-        else _timeBetweenPutBombs--;
+        if (_timeBetweenPutBombs < 0)
+            _timeBetweenPutBombs = 0;
+        else if (_timeBetweenPutBombs > 0)
+            _timeBetweenPutBombs--;
 
         animate();
 
@@ -65,8 +67,14 @@ public class Bomber extends Character {
 
         if (_alive)
             chooseSprite();
-        else
-            _sprite = Sprite.player_dead1;
+        else {
+            if(_timeAfter > 0) {
+                _sprite = Sprite.player_dead1;
+                //_animate = 0;
+            } else {
+                _sprite = Sprite.movingSprite(Sprite.player_dead1, Sprite.player_dead2, Sprite.player_dead3, _animate, 10);
+            }
+        }
 
         screen.renderEntity((int) _x, (int) _y - _sprite.SIZE, this);
     }
@@ -85,10 +93,10 @@ public class Bomber extends Character {
         // TODO: _timeBetweenPutBombs dùng để ngăn chặn Bomber đặt 2 Bomb cùng tại 1 vị trí trong 1 khoảng thời gian quá ngắn
         // TODO: nếu 3 điều kiện trên thỏa mãn thì thực hiện đặt bom bằng placeBomb()
         // TODO: sau khi đặt, nhớ giảm số lượng Bomb Rate và reset _timeBetweenPutBombs về 0
-        if (_input.space && _timeBetweenPutBombs < 0 && Game.getBombRate() > 0)
+        if (_input.space && _timeBetweenPutBombs == 0 && Game.getBombRate() > 0 && _board.getBombAt(getXTile(), getYTile()) == null)
         {
             placeBomb(getXTile(), getYTile());
-            _timeBetweenPutBombs = 15;
+            _timeBetweenPutBombs = TIME_TO_PUT_BOMB;
             Game.addBombRate(-1);
         }
     }
@@ -121,9 +129,11 @@ public class Bomber extends Character {
 
     @Override
     protected void afterKill() {
-        if (_timeAfter > 0) --_timeAfter;
+        if(_timeAfter > 0) --_timeAfter;
         else {
-            _board.endGame();
+            if(_finalAnimation > 0) --_finalAnimation;
+            else
+                _board.endGame();
         }
     }
 

@@ -167,7 +167,7 @@ public class Board implements IRender {
 		Bomb b;
 		while(bs.hasNext()) {
 			b = bs.next();
-			if(b.getX() == (int)x && b.getY() == (int)y)
+			if (b.getX() == (int)x && b.getY() == (int)y)
 				return b;
 		}
 		

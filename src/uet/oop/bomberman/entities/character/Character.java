@@ -9,13 +9,15 @@ import uet.oop.bomberman.graphics.Screen;
  * Bao gồm Bomber và Enemy
  */
 public abstract class Character extends AnimatedEntitiy {
-	
+
+	protected final int TIME_TO_PUT_BOMB = 15;
 	protected Board _board;
 	protected int _direction = -1;
 	protected boolean _alive = true;
 	protected boolean _moving = false;
 	public int _timeAfter = 40;
-	
+	protected int _finalAnimation = 30;
+
 	public Character(int x, int y, Board board) {
 		_x = x;
 		_y = y;

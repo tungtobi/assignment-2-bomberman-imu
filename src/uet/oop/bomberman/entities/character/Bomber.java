@@ -2,6 +2,7 @@ package uet.oop.bomberman.entities.character;
 
 import uet.oop.bomberman.Board;
 import uet.oop.bomberman.Game;
+import uet.oop.bomberman.audio.MyAudioPlayer;
 import uet.oop.bomberman.entities.Entity;
 import uet.oop.bomberman.entities.LayeredEntity;
 import uet.oop.bomberman.entities.bomb.Bomb;
@@ -105,6 +106,11 @@ public class Bomber extends Character {
         // TODO: thực hiện tạo đối tượng bom, đặt vào vị trí (x, y)
         Bomb bomb = new Bomb(x, y, _board);
         _board.addBomb(bomb);
+
+        // Phát âm thanh
+        MyAudioPlayer placeSound = new MyAudioPlayer(MyAudioPlayer.PLACE_BOMB);
+        placeSound.play();
+        //new Thread(placeSound).start();
     }
 
     private void clearBombs() {
@@ -124,6 +130,12 @@ public class Bomber extends Character {
     @Override
     public void kill() {
         if (!_alive) return;
+
+        _board.getMusicPlayer().stop();
+
+        MyAudioPlayer deadAudio = new MyAudioPlayer(MyAudioPlayer.DEAD);
+        deadAudio.play();
+
         _alive = false;
     }
 

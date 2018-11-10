@@ -1,5 +1,6 @@
 package uet.oop.bomberman;
 
+import uet.oop.bomberman.audio.MyAudioPlayer;
 import uet.oop.bomberman.entities.Entity;
 import uet.oop.bomberman.entities.Message;
 import uet.oop.bomberman.entities.bomb.Bomb;
@@ -26,6 +27,8 @@ public class Board implements IRender {
 	protected Game _game;
 	protected Keyboard _input;
 	protected Screen _screen;
+
+	private MyAudioPlayer _musicPlayer;
 	
 	public Entity[] _entities;
 	public List<Character> _characters = new ArrayList<>();
@@ -41,7 +44,10 @@ public class Board implements IRender {
 		_game = game;
 		_input = input;
 		_screen = screen;
-		
+
+		_musicPlayer = new MyAudioPlayer(MyAudioPlayer.BACKGROUND_MUSIC);
+		_musicPlayer.loop();
+
 		loadLevel(1); //start in level 1
 	}
 	
@@ -314,6 +320,14 @@ public class Board implements IRender {
 			return this._time;
 		else
 			return this._time--;
+	}
+
+	public MyAudioPlayer getMusicPlayer() {
+		return _musicPlayer;
+	}
+
+	public void setMusicPlayer(MyAudioPlayer _musicPlayer) {
+		this._musicPlayer = _musicPlayer;
 	}
 
 	public Keyboard getInput() {

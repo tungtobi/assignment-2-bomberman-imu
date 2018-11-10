@@ -1,6 +1,7 @@
 package uet.oop.bomberman.gui;
 
 import uet.oop.bomberman.Game;
+import uet.oop.bomberman.audio.MyAudioPlayer;
 
 import javax.swing.*;
 import java.awt.*;
@@ -13,6 +14,7 @@ public class Frame extends JFrame {
 	public GamePanel _gamepane;
 	private JPanel _containerpane;
 	private InfoPanel _infopanel;
+
 	
 	private Game _game;
 
@@ -21,12 +23,16 @@ public class Frame extends JFrame {
 		_containerpane = new JPanel(new BorderLayout());
 		_gamepane = new GamePanel(this);
 		_infopanel = new InfoPanel(_gamepane.getGame());
+
+		//_musicPlayer.setLoopable(MyAudioPlayer.Loopable.LOOP);
 		
 		_containerpane.add(_infopanel, BorderLayout.PAGE_START);
 		_containerpane.add(_gamepane, BorderLayout.PAGE_END);
 		
 		_game = _gamepane.getGame();
-		
+
+		//new Thread(_musicPlayer).start();
+
 		add(_containerpane);
 		
 		setResizable(false);

@@ -6,6 +6,7 @@ import uet.oop.bomberman.audio.MyAudioPlayer;
 import uet.oop.bomberman.entities.Entity;
 import uet.oop.bomberman.entities.LayeredEntity;
 import uet.oop.bomberman.entities.bomb.Bomb;
+import uet.oop.bomberman.entities.character.movement.Direction;
 import uet.oop.bomberman.graphics.Screen;
 import uet.oop.bomberman.graphics.Sprite;
 import uet.oop.bomberman.input.Keyboard;
@@ -94,8 +95,8 @@ public class Bomber extends Character {
         // TODO: _timeBetweenPutBombs dùng để ngăn chặn Bomber đặt 2 Bomb cùng tại 1 vị trí trong 1 khoảng thời gian quá ngắn
         // TODO: nếu 3 điều kiện trên thỏa mãn thì thực hiện đặt bom bằng placeBomb()
         // TODO: sau khi đặt, nhớ giảm số lượng Bomb Rate và reset _timeBetweenPutBombs về 0
-        if (_input.space && _timeBetweenPutBombs == 0 && Game.getBombRate() > 0 && _board.getBombAt(getXTile(), getYTile()) == null)
-        {
+        if (_input.space && _timeBetweenPutBombs == 0
+                && Game.getBombRate() > 0 && _board.getBombAt(getXTile(), getYTile()) == null) {
             placeBomb(getXTile(), getYTile());
             _timeBetweenPutBombs = TIME_TO_PUT_BOMB;
             Game.addBombRate(-1);
@@ -206,17 +207,16 @@ public class Bomber extends Character {
         // TODO: sử dụng canMove() để kiểm tra xem có thể di chuyển tới điểm đã tính toán hay không và thực hiện thay đổi tọa độ _x, _y
         // TODO: nhớ cập nhật giá trị _direction sau khi di chuyển
 
-        if      (_input.up)    _direction = 0;
-        else if (_input.right) _direction = 1;
-        else if (_input.down)  _direction = 2;
-        else if (_input.left)  _direction = 3;
+        if      (_input.up)    _direction = Direction.UP;
+        else if (_input.right) _direction = Direction.RIGHT;
+        else if (_input.down)  _direction = Direction.DOWN;
+        else if (_input.left)  _direction = Direction.LEFT;
 
         // DEBUG
         // System.out.println(xa + " " + ya + " " + canMove(xa, ya));
         // END DEBUG
 
-        if (canMove(xa, ya))
-        {
+        if (canMove(xa, ya)) {
             _x = xa;
             _y = ya;
         }
@@ -228,17 +228,13 @@ public class Bomber extends Character {
         // TODO: xử lý va chạm với Flame
         // TODO: xử lý va chạm với Enemy
 
-        if (e instanceof Flame)
-        {
+        if (e instanceof Flame) {
             this.kill();
             return false;
-        }
-        else if (e instanceof Enemy)
-        {
+        } else if (e instanceof Enemy) {
             this.kill();
             return true;
-        }
-        else if (e instanceof Bomber)
+        } else if (e instanceof Bomber)
             return false;
 
         return e.collide(this);
@@ -246,25 +242,25 @@ public class Bomber extends Character {
 
     private void chooseSprite() {
         switch (_direction) {
-            case 0:
+            case UP:
                 _sprite = Sprite.player_up;
                 if (_moving) {
                     _sprite = Sprite.movingSprite(Sprite.player_up_1, Sprite.player_up_2, _animate, 20);
                 }
                 break;
-            case 1:
+            case RIGHT:
                 _sprite = Sprite.player_right;
                 if (_moving) {
                     _sprite = Sprite.movingSprite(Sprite.player_right_1, Sprite.player_right_2, _animate, 20);
                 }
                 break;
-            case 2:
+            case DOWN:
                 _sprite = Sprite.player_down;
                 if (_moving) {
                     _sprite = Sprite.movingSprite(Sprite.player_down_1, Sprite.player_down_2, _animate, 20);
                 }
                 break;
-            case 3:
+            case LEFT:
                 _sprite = Sprite.player_left;
                 if (_moving) {
                     _sprite = Sprite.movingSprite(Sprite.player_left_1, Sprite.player_left_2, _animate, 20);

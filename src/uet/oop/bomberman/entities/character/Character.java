@@ -3,6 +3,7 @@ package uet.oop.bomberman.entities.character;
 import uet.oop.bomberman.Board;
 import uet.oop.bomberman.Game;
 import uet.oop.bomberman.entities.AnimatedEntitiy;
+import uet.oop.bomberman.entities.character.movement.Direction;
 import uet.oop.bomberman.graphics.Screen;
 
 /**
@@ -12,7 +13,7 @@ public abstract class Character extends AnimatedEntitiy {
 
 	protected final int TIME_TO_PUT_BOMB = 15;
 	protected Board _board;
-	protected int _direction = -1;
+	protected Direction _direction = Direction.NONE;
 	protected boolean _alive = true;
 	protected boolean _moving = false;
 	public int _timeAfter = 40;
@@ -55,7 +56,7 @@ public abstract class Character extends AnimatedEntitiy {
 	 */
 	protected abstract boolean canMove(double x, double y);
 
-	public int getDirection()
+	public Direction getDirection()
 	{
 		return this._direction;
 	}

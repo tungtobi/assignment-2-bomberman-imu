@@ -53,7 +53,11 @@ public class Board implements IRender {
 	
 	@Override
 	public void update() {
-		if( _game.isPaused() ) return;
+		if( _game.isPaused() ) {
+            if (_input.space)
+                loadLevel(1);
+		    //return;
+        }
 		
 		updateEntities();
 		updateCharacters();
@@ -119,6 +123,7 @@ public class Board implements IRender {
 		_screenToShow = 1;
 		_game.resetScreenDelay();
 		_game.pause();
+
 	}
 	
 	public boolean detectNoEnemies() {

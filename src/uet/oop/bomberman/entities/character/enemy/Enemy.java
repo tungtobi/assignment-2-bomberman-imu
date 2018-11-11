@@ -7,6 +7,7 @@ import uet.oop.bomberman.entities.Entity;
 import uet.oop.bomberman.entities.Message;
 import uet.oop.bomberman.entities.bomb.Flame;
 import uet.oop.bomberman.entities.bomb.FlameSegment;
+import uet.oop.bomberman.entities.character.movement.Direction;
 import uet.oop.bomberman.entities.tile.Grass;
 import uet.oop.bomberman.entities.tile.Portal;
 import uet.oop.bomberman.entities.character.Bomber;
@@ -87,16 +88,21 @@ public abstract class Enemy extends Character {
 
 		double xa = 0;
 		double ya = 0;
-		if      (_direction == 0) ya -= _speed;
-		else if (_direction == 1) xa += _speed;
-		else if (_direction == 2) ya += _speed;
-		else if (_direction == 3) xa -= _speed;
+
+		if (_direction == Direction.UP)
+			ya -= _speed;
+		else if (_direction == Direction.RIGHT)
+		    xa += _speed;
+		else if (_direction == Direction.DOWN)
+		    ya += _speed;
+		else if (_direction == Direction.LEFT)
+		    xa -= _speed;
+
 		_moving = (xa != 0) || (ya != 0);
-		if (canMove(_x + xa, _y + ya))
-		{
+
+		if (canMove(_x + xa, _y + ya)) {
 			move(xa, ya);
-		}
-		else
+		} else
 			_direction = _ai.calculateDirection();
 	}
 	
@@ -166,4 +172,12 @@ public abstract class Enemy extends Character {
 	}
 	
 	protected abstract void chooseSprite();
+
+    public double getSpeed() {
+        return _speed;
+    }
+
+    public void setSpeed(double speed) {
+        this._speed = speed;
+    }
 }

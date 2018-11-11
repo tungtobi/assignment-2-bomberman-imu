@@ -18,6 +18,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
+import java.net.URISyntaxException;
+import java.net.URL;
 
 import static uet.oop.bomberman.audio.MyAudioPlayer.Loopable.NONELOOP;
 
@@ -41,20 +43,19 @@ public class MyAudioPlayer implements Runnable {
     private Loopable loopable = NONELOOP;
 
     public MyAudioPlayer(String fileName) {
+        String path = "/audio/" + fileName + ".wav";
+
         try {
-            File file = new File("./res/audio/" + fileName + ".wav");
-            if (file.exists()) {
-                AudioInputStream sound = AudioSystem.getAudioInputStream(file);
-                // load the sound into memory (a Clip)
-                clip = AudioSystem.getClip();
-                clip.open(sound);
-            } else throw new FileNotFoundException("Sound: file not found: " + fileName);
+            URL defaultSound = getClass().getResource(path);
+            AudioInputStream sound = AudioSystem.getAudioInputStream(defaultSound);
+            // load the sound into memory (a Clip)
+            clip = AudioSystem.getClip();
+            clip.open(sound);
         } catch (MalformedURLException e) {
             e.printStackTrace();
             throw new RuntimeException("Sound: Malformed URL: " + e);
         } catch (UnsupportedAudioFileException e) {
             e.printStackTrace();
-            throw new RuntimeException("Sound: Unsupported Audio File: " + e);
         } catch (IOException e) {
             e.printStackTrace();
             throw new RuntimeException("Sound: Input/Output Error: " + e);

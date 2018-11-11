@@ -24,14 +24,10 @@ public class Frame extends JFrame {
 		_gamepane = new GamePanel(this);
 		_infopanel = new InfoPanel(_gamepane.getGame());
 
-		//_musicPlayer.setLoopable(MyAudioPlayer.Loopable.LOOP);
-		
 		_containerpane.add(_infopanel, BorderLayout.PAGE_START);
 		_containerpane.add(_gamepane, BorderLayout.PAGE_END);
 		
 		_game = _gamepane.getGame();
-
-		//new Thread(_musicPlayer).start();
 
 		add(_containerpane);
 		

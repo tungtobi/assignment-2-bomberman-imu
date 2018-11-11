@@ -20,15 +20,15 @@ public class Oneal extends Enemy {
 	@Override
 	protected void chooseSprite() {
 		switch(_direction) {
-			case 0:
-			case 1:
+			case UP:
+			case RIGHT:
 				if(_moving)
 					_sprite = Sprite.movingSprite(Sprite.oneal_right1, Sprite.oneal_right2, Sprite.oneal_right3, _animate, 60);
 				else
 					_sprite = Sprite.oneal_left1;
 				break;
-			case 2:
-			case 3:
+            case DOWN:
+            case LEFT:
 				if(_moving)
 					_sprite = Sprite.movingSprite(Sprite.oneal_left1, Sprite.oneal_left2, Sprite.oneal_left3, _animate, 60);
 				else

@@ -24,7 +24,8 @@ public class DestroyableTile extends Tile {
 	@Override
 	public void update() {
 		if(_destroyed) {
-			if(_animate < MAX_ANIMATE) _animate++; else _animate = 0;
+			if(_animate < MAX_ANIMATE) _animate++;
+			else _animate = 0;
 			if(_timeToDisapear > 0) 
 				_timeToDisapear--;
 			else
@@ -53,14 +54,12 @@ public class DestroyableTile extends Tile {
 	protected Sprite movingSprite(Sprite normal, Sprite x1, Sprite x2) {
 		int calc = _animate % 30;
 		
-		if(calc < 10) {
+		if (calc < 10) {
 			return normal;
 		}
-			
-		if(calc < 20) {
+		if (calc < 20) {
 			return x1;
 		}
-			
 		return x2;
 	}
 	

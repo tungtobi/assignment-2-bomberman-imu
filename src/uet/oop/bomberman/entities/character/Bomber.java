@@ -200,6 +200,17 @@ public class Bomber extends Character {
             return true;
 
         return false;
+//        for (int c = 0; c < 4; c++) { //colision detection for each corner of the player
+//            double xt = ((_x + x) + c % 2 * 11) / Game.TILES_SIZE; //divide with tiles size to pass to tile coordinate
+//            double yt = ((_y + y) + c / 2 * 12 - 13) / Game.TILES_SIZE; //these values are the best from multiple tests
+//
+//            Entity a = _board.getEntity(xt, yt, this);
+//
+//            if(!a.collide(this))
+//                return false;
+//        }
+//
+//        return true;
     }
 
     @Override
@@ -216,11 +227,23 @@ public class Bomber extends Character {
         // System.out.println(xa + " " + ya + " " + canMove(xa, ya));
         // END DEBUG
 
-        if (canMove(xa, ya)) {
-            _x = xa;
+//        if (canMove(xa, ya)) {
+//            _x = xa;
+//            _y = ya;
+//        }
+
+//        if(xa > 0) _direction = Direction.RIGHT;
+//        if(xa < 0) _direction = Direction.LEFT;
+//        if(ya > 0) _direction = Direction.DOWN;
+//        if(ya < 0) _direction = Direction.UP;
+
+        if(canMove(_x, ya)) { //separate the moves for the player can slide when is colliding
             _y = ya;
         }
-
+//
+        if(canMove(xa, _y)) {
+            _x = xa;
+        }
     }
 
     @Override

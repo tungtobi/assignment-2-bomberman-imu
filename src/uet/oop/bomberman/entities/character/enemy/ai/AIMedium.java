@@ -1,8 +1,10 @@
 package uet.oop.bomberman.entities.character.enemy.ai;
 
+import uet.oop.bomberman.Game;
 import uet.oop.bomberman.entities.character.Bomber;
 import uet.oop.bomberman.entities.character.enemy.Enemy;
 import uet.oop.bomberman.entities.character.movement.Direction;
+import uet.oop.bomberman.entities.tile.Tile;
 
 public class AIMedium extends AI {
 	Bomber _bomber;
@@ -15,46 +17,84 @@ public class AIMedium extends AI {
 	@Override
 	public Direction calculateDirection() {
 		// TODO: cài đặt thuật toán tìm đường đi
-        double distance = getDistance();
-        double _x = _e.getX(), _y = _e.getY();
-        Direction _dir = _e.getDirection();
+        if (_bomber == null || !isBomberNearly()) {
+            _e.setSpeed(Game.getBomberSpeed() / 2);
+            return randomDirection();
+        }
+
+        return followBomber();
+	}
+
+	private boolean isBomberNearly() {
+	    return getDistance() <= 80;
+    }
+
+	private boolean canEnemyMove(Direction _direction) {
+        double xa = 0;
+        double ya = 0;
+
         double _speed = _e.getSpeed();
 
-        if      (_dir == Direction.UP) _y -= _speed;
-        else if (_dir == Direction.RIGHT) _x += _speed;
-        else if (_dir == Direction.DOWN) _y += _speed;
-        else if (_dir == Direction.LEFT) _x -= _speed;
+        if (_direction == Direction.UP)
+            ya -= _speed;
+        else if (_direction == Direction.RIGHT)
+            xa += _speed;
+        else if (_direction == Direction.DOWN)
+            ya += _speed;
+        else if (_direction == Direction.LEFT)
+            xa -= _speed;
 
-        if (_bomber == null || distance > 80 || !_e.canMove(_x, _y)) {
-            return randomDirection();
-        } else {
-            int vertical = random.nextInt(2);
-            Direction dir;
+        return _e.canMove(_e.getX() + xa, _e.getY() + ya);
+    }
 
-            switch (vertical) {
-                case 1:
-                    dir = calculateRowDirection();
-                    if (dir == Direction.NONE)
-                        dir = calculateColDirection();
-                    break;
-                default:
+	private Direction followBomber() {
+        int vertical = random.nextInt(2);
+        Direction dir;
+
+        switch (vertical) {
+            case 1:
+                dir = calculateRowDirection();
+                if (dir == Direction.NONE)
                     dir = calculateColDirection();
-                    if (dir == Direction.NONE)
-                        dir = calculateRowDirection();
-                    break;
-            }
-
-            return dir;
+                break;
+            default:
+                dir = calculateColDirection();
+                if (dir == Direction.NONE)
+                    dir = calculateRowDirection();
+                break;
         }
-	}
+
+        return dir;
+    }
+
+	public Direction checkoutBomber() {
+        Direction dir = _e.getDirection();
+
+        if (_bomber == null)
+            return dir;
+
+        if (Math.abs(_bomber.getX() - _e.getX()) < 0.5) {
+            _e.setSpeed(Game.getBomberSpeed());
+            dir = calculateRowDirection();
+        }
+        if (Math.abs(_bomber.getY() - _e.getY()) < 0.5) {
+            _e.setSpeed(Game.getBomberSpeed());
+            dir = calculateColDirection();
+        }
+
+//        if (!canEnemyMove(dir))
+//            return randomDirection();
+
+        return dir;
+    }
 
     private Direction calculateColDirection() {
         if (_bomber == null)
             return Direction.NONE;
 
-        if(_bomber.getXTile() < _e.getXTile())
+        if(_bomber.getX() < _e.getX())
             return Direction.LEFT;
-        else if(_bomber.getXTile() > _e.getXTile())
+        else if(_bomber.getX() > _e.getX())
             return Direction.RIGHT;
 
         return Direction.NONE;
@@ -64,15 +104,15 @@ public class AIMedium extends AI {
 	    if (_bomber == null)
 	        return Direction.NONE;
 
-        if(_bomber.getYTile() < _e.getYTile())
+        if(_bomber.getY() < _e.getY())
             return Direction.UP;
-        else if(_bomber.getYTile() > _e.getYTile())
+        else if(_bomber.getY() > _e.getY())
             return Direction.DOWN;
 
         return Direction.NONE;
     }
 
-	private double getDistance() {
+	public double getDistance() {
 	    if (_bomber == null)
 	        return -1;
 

@@ -5,6 +5,7 @@ import uet.oop.bomberman.Board;
 import uet.oop.bomberman.Game;
 import uet.oop.bomberman.entities.Entity;
 import uet.oop.bomberman.entities.Message;
+import uet.oop.bomberman.entities.bomb.Bomb;
 import uet.oop.bomberman.entities.bomb.Flame;
 import uet.oop.bomberman.entities.bomb.FlameSegment;
 import uet.oop.bomberman.entities.character.movement.Direction;
@@ -132,20 +133,19 @@ public abstract class Enemy extends Character {
 	public boolean collide(Entity e) {
 		// TODO: xử lý va chạm với Flame
 		// TODO: xử lý va chạm với Bomber
-		if (e instanceof Flame)
-		{
+		if (e instanceof Flame) {
 			this.kill();
 			return false;
 		}
 
-		if (e instanceof Bomber)
-		{
+		if (e instanceof Bomber) {
 			((Bomber)e).kill();
 			return true;
 		}
 
 		if (e instanceof Enemy)
 			return false;
+
 		return e.collide(this);
 	}
 	

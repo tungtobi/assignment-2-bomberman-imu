@@ -25,7 +25,7 @@ public abstract class AI {
 	 */
 	public abstract Direction calculateDirection();
 
-	protected Direction randomDirection() {
+	public Direction randomDirection() {
         Direction curDir = _e.getDirection();
         Direction ret = DirectionConverter.fromInt(random.nextInt(4));
 

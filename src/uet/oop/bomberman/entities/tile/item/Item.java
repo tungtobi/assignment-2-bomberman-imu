@@ -4,6 +4,7 @@ import uet.oop.bomberman.audio.MyAudioPlayer;
 import uet.oop.bomberman.entities.Entity;
 import uet.oop.bomberman.entities.character.Bomber;
 import uet.oop.bomberman.entities.tile.Tile;
+import uet.oop.bomberman.entities.bomb.Flame;
 import uet.oop.bomberman.graphics.Sprite;
 
 public abstract class Item extends Tile {
@@ -32,6 +33,12 @@ public abstract class Item extends Tile {
 			}
 			remove();
 
+			return true;
+		}
+
+		if (e instanceof Flame)
+		{
+			remove();
 			return true;
 		}
 		return false;

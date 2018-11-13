@@ -7,7 +7,6 @@ import uet.oop.bomberman.entities.AnimatedEntitiy;
 import uet.oop.bomberman.entities.Entity;
 import uet.oop.bomberman.entities.character.Bomber;
 import  uet.oop.bomberman.entities.character.Character;
-import uet.oop.bomberman.entities.character.enemy.Enemy;
 import uet.oop.bomberman.graphics.Screen;
 import uet.oop.bomberman.graphics.Sprite;
 import uet.oop.bomberman.level.Coordinates;
@@ -15,7 +14,7 @@ import uet.oop.bomberman.level.Coordinates;
 public class Bomb extends AnimatedEntitiy {
 
 	protected double _timeToExplode = 120; //2 seconds
-	public int _timeAfter = 20;
+	public int _timeAfter = 30;
 	
 	protected Board _board;
 	protected Flame[] _flames;
@@ -51,7 +50,7 @@ public class Bomb extends AnimatedEntitiy {
 	@Override
 	public void render(Screen screen) {
 		if(_exploded) {
-			_sprite =  Sprite.bomb_exploded2;
+			_sprite = Sprite.movingSprite(Sprite.bomb_exploded, Sprite.bomb_exploded1, Sprite.bomb_exploded2, _animate, 60);
 			renderFlames(screen);
 		} else
 			_sprite = Sprite.movingSprite(Sprite.bomb, Sprite.bomb_1, Sprite.bomb_2, _animate, 60);
@@ -131,6 +130,7 @@ public class Bomb extends AnimatedEntitiy {
         {
         	if (!_exploded)
         		this.explode();
+        	return true;
         }
         return false;
 	}

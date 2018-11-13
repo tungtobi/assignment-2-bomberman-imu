@@ -1,11 +1,13 @@
 package uet.oop.bomberman.entities.bomb;
 
 import uet.oop.bomberman.Board;
+import uet.oop.bomberman.entities.AnimatedEntitiy;
 import uet.oop.bomberman.entities.Entity;
 import uet.oop.bomberman.graphics.Screen;
 import uet.oop.bomberman.entities.character.Character;
 
-public class Flame extends Entity {
+public class Flame extends Entity
+{
 
 	protected Board _board;
 	protected int _direction;
@@ -81,7 +83,7 @@ public class Flame extends Entity {
 
 			if (a instanceof Character) radius++;
 			
-			if (a.collide(this) == false) 
+			if (!a.collide(this))
 				break;
 			
 			radius++;
@@ -99,12 +101,18 @@ public class Flame extends Entity {
 	}
 
 	@Override
-	public void update() {}
+	public void update() {
+		for (FlameSegment _flameSegment : _flameSegments)
+		{
+			_flameSegment.update();
+		}
+	}
 	
 	@Override
 	public void render(Screen screen) {
-		for (int i = 0; i < _flameSegments.length; i++) {
-			_flameSegments[i].render(screen);
+		for (FlameSegment _flameSegment : _flameSegments)
+		{
+			_flameSegment.render(screen);
 		}
 	}
 

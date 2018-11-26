@@ -9,14 +9,22 @@ import org.netbeans.lib.awtextra.AbsoluteLayout;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseMotionAdapter;
 
 public class Launcher extends JFrame
 {
     BombermanGame bomberman;
 
+    private int xLocation;
+    private int yLocation;
+
     public Launcher(BombermanGame bomberman)
     {
         this.bomberman = bomberman;
+        xLocation = 0;
+        yLocation = 0;
         initComponents();
     }
 
@@ -26,6 +34,8 @@ public class Launcher extends JFrame
         closeBtn = new JButton();
         menuPanel = new JPanel();
         titleLabel = new JLabel();
+        titleImage = new JLabel();
+        titleMenu = new JLabel();
         movement = new JLabel();
         placeBomb = new JLabel();
         quitBtn = new JButton();
@@ -37,9 +47,12 @@ public class Launcher extends JFrame
         infoPanel = new JPanel();
 
         setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
+        Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
         setMaximumSize(new Dimension(1150, 630));
+        setSize(new Dimension(1150, 630));
         setResizable(false);
-        setExtendedState(JFrame.MAXIMIZED_BOTH);
+        this.setLocation(dim.width / 2 - this.getSize().width / 2, dim.height / 2 - this.getSize().height / 2);
+        // setExtendedState(JFrame.MAXIMIZED_BOTH);
         setUndecorated(true);
         getContentPane().setLayout(new AbsoluteLayout());
 
@@ -49,7 +62,25 @@ public class Launcher extends JFrame
         closeBtn.setContentAreaFilled(false);
         closeBtn.addActionListener(this::quitBtnActionPerformed);
         closeBtn.setForeground(new Color(255, 255, 255));
-        getContentPane().add(closeBtn, new org.netbeans.lib.awtextra.AbsoluteConstraints(1115, 1, 32, 32));
+        getContentPane().add(closeBtn, new AbsoluteConstraints(1115, 1, 32, 32));
+
+        titleMenu.addMouseListener(new MouseAdapter()
+        {
+            @Override
+            public void mousePressed(MouseEvent mouseEvent)
+            {
+                mousePressedHandle(mouseEvent);
+            }
+        });
+        titleMenu.addMouseMotionListener(new MouseMotionAdapter()
+        {
+            @Override
+            public void mouseDragged(MouseEvent mouseEvent)
+            {
+                mouseDragListener(mouseEvent);
+            }
+        });
+        getContentPane().add(titleMenu, new AbsoluteConstraints(0, 0, 1100, 30));
 
         infoPanel.setBackground(new Color(35, 35, 35, 200));
         infoPanel.setBorder(BorderFactory.createEmptyBorder(1, 1, 1, 1));
@@ -123,6 +154,25 @@ public class Launcher extends JFrame
 
         imagePanel.setBackground(new Color(0, 0, 0, 0));
         imagePanel.setLayout(new AbsoluteLayout());
+
+        titleImage.addMouseListener(new MouseAdapter()
+        {
+            @Override
+            public void mousePressed(MouseEvent mouseEvent)
+            {
+                mousePressedHandle(mouseEvent);
+            }
+        });
+        titleImage.addMouseMotionListener(new MouseMotionAdapter()
+        {
+            @Override
+            public void mouseDragged(MouseEvent mouseEvent)
+            {
+                mouseDragListener(mouseEvent);
+            }
+        });
+        imagePanel.add(titleImage, new AbsoluteConstraints(0, 0, 580, 620));
+
         getContentPane().add(imagePanel, new AbsoluteConstraints(0, 0, 580, 620));
 
         backgroundLabel.setIcon(new ImageIcon(getClass().getResource("/images/bgk.jpeg")));
@@ -162,6 +212,12 @@ public class Launcher extends JFrame
         setVisible(true);
     }
 
+    private void mousePressedHandle(MouseEvent mouseEvent)
+    {
+        this.xLocation = mouseEvent.getX();
+        this.yLocation = mouseEvent.getY();
+    }
+
     private void quitBtnActionPerformed(ActionEvent evt)
     {
         System.exit(0);
@@ -185,6 +241,14 @@ public class Launcher extends JFrame
         menuPanel.setVisible(true);
     }
 
+    private void mouseDragListener(MouseEvent evt)
+    {
+        int x = evt.getXOnScreen();
+        int y = evt.getYOnScreen();
+
+        setLocation(x - xLocation, y - yLocation);
+    }
+
     private JLabel backgroundLabel;
     private JButton howBtn;
     private JPanel imagePanel;
@@ -196,5 +260,7 @@ public class Launcher extends JFrame
     private JButton quitBtn;
     private JButton backBtn;
     private JButton closeBtn;
+    private JLabel titleImage;
     private JLabel titleLabel;
+    private JLabel titleMenu;
 }

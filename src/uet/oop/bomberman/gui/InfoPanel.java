@@ -7,7 +7,6 @@ import java.awt.*;
 import java.io.IOException;
 import java.io.InputStream;
 
-import static com.sun.org.apache.xalan.internal.utils.SecuritySupport.getResourceAsStream;
 
 /**
  * Swing Panel hiển thị thông tin thời gian, điểm mà người chơi đạt được

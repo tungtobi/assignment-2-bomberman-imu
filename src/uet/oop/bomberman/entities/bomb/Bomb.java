@@ -20,11 +20,13 @@ public class Bomb extends AnimatedEntitiy {
 	protected Flame[] _flames;
 	protected boolean _exploded = false;
 	protected boolean _allowedToPassThru = true;
-	
-	public Bomb(int x, int y, Board board) {
+    protected int _bombRadius = Game.BOMBRADIUS;
+
+    public Bomb(int x, int y, int radius, Board board) {
 		_x = x;
 		_y = y;
 		_board = board;
+		_bombRadius = radius;
 		_sprite = Sprite.bomb;
 	}
 	
@@ -73,6 +75,14 @@ public class Bomb extends AnimatedEntitiy {
 		}
 	}
 
+	public int getBombRadius() {
+		return _bombRadius;
+	}
+
+    public void setBombRadius(int _bombRadius) {
+        this._bombRadius = _bombRadius;
+    }
+
     /**
      * Xử lý Bomb nổ
      */
@@ -85,14 +95,13 @@ public class Bomb extends AnimatedEntitiy {
 		if (entity != null)
 			entity.kill();
 		// TODO: tạo các Flame
-		int flameRadius = Game.getBombRadius();
+		int flameRadius = this.getBombRadius();
 		_flames = new Flame[4];
 		for (int i = 0; i < 4; i++)
 			_flames[i] = new Flame((int) _x, (int) _y, i, flameRadius, _board);
 
         MyAudioPlayer explodeAudio = new MyAudioPlayer(MyAudioPlayer.EXPLOSION);
         explodeAudio.play();
-        //new Thread(explodeAudio).start();
 	}
 	
 	public FlameSegment flameAt(int x, int y) {
@@ -112,11 +121,10 @@ public class Bomb extends AnimatedEntitiy {
         // TODO: xử lý khi Bomber đi ra sau khi vừa đặt bom (_allowedToPassThru)
         // TODO: xử lý va chạm với Flame của Bomb khác
 
-		if (e instanceof Bomber && _allowedToPassThru)
-		{
+		if (e instanceof Bomber && _allowedToPassThru) {
 			int bomberSize = e.getSprite().getSize();
 			boolean bottomLeftCheck = Coordinates.pixelToTile(e.getX()) != (int) _x || Coordinates.pixelToTile(e.getY() - 1) != (int) _y;
-			boolean topRightCheck = Coordinates.pixelToTile(e.getX() + bomberSize - 1 - ((Bomber) e).getBomberBeauty()) != (int) _x || Coordinates.pixelToTile(e.getY() - bomberSize) != (int) _y;
+			boolean topRightCheck = Coordinates.pixelToTile(e.getX() + bomberSize - 1) != (int) _x || Coordinates.pixelToTile(e.getY() - bomberSize) != (int) _y;
 
 			if (bottomLeftCheck && topRightCheck)
 			{
@@ -126,8 +134,7 @@ public class Bomb extends AnimatedEntitiy {
 			return true;
 		}
 
-        if (e instanceof Flame)
-        {
+        if (e instanceof Flame) {
         	if (!_exploded)
         		this.explode();
         	return true;

@@ -31,6 +31,7 @@ public class MyAudioPlayer implements Runnable {
     public static final String POWER_UP = "power_up";
     public static final String EXPLOSION = "explosion";
     public static final String DEAD = "dead";
+    public static final String ENEMY_DEAD = "dead2";
 
     private Clip clip;
 

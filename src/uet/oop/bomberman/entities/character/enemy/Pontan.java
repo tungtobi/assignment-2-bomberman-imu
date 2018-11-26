@@ -10,7 +10,7 @@ import uet.oop.bomberman.graphics.Sprite;
 public class Pontan extends Enemy {
 
 	public Pontan(int x, int y, Board board) {
-		super(x, y, board, Sprite.pontan_dead, Game.getBomberSpeed(), 200);
+		super(x, y, board, Sprite.pontan_dead, Game.getEnemySpeed(), 200);
 		
 		_sprite = Sprite.pontan_left1;
 		

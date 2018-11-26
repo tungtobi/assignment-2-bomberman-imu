@@ -23,25 +23,24 @@ public class Game extends Canvas {
 	
 	public static final String TITLE = "BombermanGame";
 	
-	private static final int BOMBRATE = 1;
-	private static final int BOMBRADIUS = 1;
-	private static final double BOMBERSPEED = 1.0;
+	public static final int BOMBRATE = 1;
+	public static final int BOMBRADIUS = 1;
+	public static final double BOMBERSPEED = 1.0;
+	private static final double ENEMYSPEED = 1.0;
 	
 	public static final int TIME = 200;
 	public static final int POINTS = 0;
 	
 	protected static int SCREENDELAY = 3;
 
-	protected static int bombRate = BOMBRATE;
-	protected static int bombRadius = BOMBRADIUS;
-	protected static double bomberSpeed = BOMBERSPEED;
+	protected static double enemySpeed = ENEMYSPEED;
 	
 	
 	protected int _screenDelay = SCREENDELAY;
 	
 	private Keyboard _input;
-	private boolean _running = false;
-	private boolean _paused = true;
+	public boolean _running = false;
+	public boolean _paused = true;
 	
 	private Board _board;
 	private Screen screen;
@@ -148,52 +147,20 @@ public class Game extends Canvas {
 				_frame.setTitle(TITLE + " | " + updates + " rate, " + frames + " fps");
 				updates = 0;
 				frames = 0;
-
-				if (_board.getShow() == 1 && _screenDelay == 1)
-					stop();
-
-				if (!_frame.isDisplayable())
-				{
-					_board.endGame();
-					stop();
-				}
 				
-				if(_board.getShow() == 2 || _board.getShow() == 1)
+				if(_board.getShow() == 2)
 					--_screenDelay;
 			}
 		}
 	}
 	
-	public static double getBomberSpeed() {
-		return bomberSpeed;
-	}
-	
-	public static int getBombRate() {
-		return bombRate;
-	}
-	
-	public static int getBombRadius() {
-		return bombRadius;
-	}
-	
-	public static void addBomberSpeed(double i) {
-		bomberSpeed += i;
-	}
-	
-	public static void addBombRadius(int i) {
-		bombRadius += i;
-	}
-	
-	public static void addBombRate(int i) {
-		bombRate += i;
-	}
+
+    public static double getEnemySpeed() {
+        return enemySpeed;
+    }
 
 	public void resetScreenDelay() {
 		_screenDelay = SCREENDELAY;
-	}
-
-	public void stop() {
-		_running = false;
 	}
 
 	public Board getBoard() {
@@ -206,6 +173,11 @@ public class Game extends Canvas {
 	
 	public void pause() {
 		_paused = true;
+        System.out.println(_paused);
 	}
+
+	public void resume() {
+	    _paused = false;
+    }
 	
 }

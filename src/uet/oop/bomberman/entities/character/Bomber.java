@@ -4,19 +4,11 @@ import uet.oop.bomberman.Board;
 import uet.oop.bomberman.Game;
 import uet.oop.bomberman.audio.MyAudioPlayer;
 import uet.oop.bomberman.entities.Entity;
-import uet.oop.bomberman.entities.LayeredEntity;
 import uet.oop.bomberman.entities.bomb.Bomb;
 import uet.oop.bomberman.entities.character.movement.Direction;
 import uet.oop.bomberman.graphics.Screen;
 import uet.oop.bomberman.graphics.Sprite;
 import uet.oop.bomberman.input.Keyboard;
-import uet.oop.bomberman.entities.tile.Grass;
-import uet.oop.bomberman.entities.tile.Portal;
-import uet.oop.bomberman.entities.tile.destroyable.Brick;
-import uet.oop.bomberman.entities.tile.Wall;
-import uet.oop.bomberman.entities.tile.item.Item;
-import uet.oop.bomberman.entities.bomb.Flame;
-import uet.oop.bomberman.entities.bomb.FlameSegment;
 import uet.oop.bomberman.entities.character.enemy.Enemy;
 import uet.oop.bomberman.level.Coordinates;
 
@@ -24,11 +16,14 @@ import java.util.Iterator;
 import java.util.List;
 
 public class Bomber extends Character {
-
-    private final int BOMBER_BEAUTY = 0;
+    protected int _bombRate = Game.BOMBRATE;
+    protected double _bomberSpeed = Game.BOMBERSPEED;
+    protected int _bombRadius = Game.BOMBRADIUS;
 
     private List<Bomb> _bombs;
     protected Keyboard _input;
+
+    private boolean isPause = false;
 
     /**
      * nếu giá trị này < 0 thì cho phép đặt đối tượng Bomb tiếp theo,
@@ -45,22 +40,34 @@ public class Bomber extends Character {
 
     @Override
     public void update() {
-        clearBombs();
-        if (!_alive) {
-            afterKill();
-            return;
+        if (_input.pause) {
+            isPause = !isPause;
+
+            System.out.println(_board.getGame()._paused);
         }
 
-        if (_timeBetweenPutBombs < 0)
-            _timeBetweenPutBombs = 0;
-        else if (_timeBetweenPutBombs > 0)
-            _timeBetweenPutBombs--;
+        if (isPause) {
+            _board.getGame().pause();
+        } else {
+            _board.getGame().resume();
+        }
 
-        animate();
+        if (!_board.getGame().isPaused()) {
+            clearBombs();
+            if (!_alive) {
+                afterKill();
+                return;
+            }
 
-        calculateMove();
+            if (_timeBetweenPutBombs < 0)
+                _timeBetweenPutBombs = 0;
+            else if (_timeBetweenPutBombs > 0)
+                _timeBetweenPutBombs--;
 
-        detectPlaceBomb();
+            animate();
+            calculateMove();
+            detectPlaceBomb();
+        }
     }
 
     @Override
@@ -96,22 +103,45 @@ public class Bomber extends Character {
         // TODO: nếu 3 điều kiện trên thỏa mãn thì thực hiện đặt bom bằng placeBomb()
         // TODO: sau khi đặt, nhớ giảm số lượng Bomb Rate và reset _timeBetweenPutBombs về 0
         if (_input.space && _timeBetweenPutBombs == 0
-                && Game.getBombRate() > 0 && _board.getBombAt(getXTile(), getYTile()) == null) {
+                && this.getBombRate() > 0 && _board.getBombAt(getXTile(), getYTile()) == null) {
             placeBomb(getXTile(), getYTile());
             _timeBetweenPutBombs = TIME_TO_PUT_BOMB;
-            Game.addBombRate(-1);
+            this.addBombRate(-1);
         }
+    }
+
+    public void addBombRate(int i) {
+        _bombRate += i;
+    }
+
+    public int getBombRate() {
+        return _bombRate;
+    }
+
+    public double getBomberSpeed() {
+        return _bomberSpeed;
+    }
+
+    public void addBomberSpeed(double i) {
+        _bomberSpeed += i;
+    }
+
+    public int getBombRadius() {
+        return _bombRadius;
+    }
+
+    public void addBombRadius(int i) {
+        _bombRadius += i;
     }
 
     protected void placeBomb(int x, int y) {
         // TODO: thực hiện tạo đối tượng bom, đặt vào vị trí (x, y)
-        Bomb bomb = new Bomb(x, y, _board);
+        Bomb bomb = new Bomb(x, y, _bombRadius, _board);
         _board.addBomb(bomb);
 
         // Phát âm thanh
         MyAudioPlayer placeSound = new MyAudioPlayer(MyAudioPlayer.PLACE_BOMB);
         placeSound.play();
-        //new Thread(placeSound).start();
     }
 
     private void clearBombs() {
@@ -122,7 +152,7 @@ public class Bomber extends Character {
             b = bs.next();
             if (b.isRemoved()) {
                 bs.remove();
-                Game.addBombRate(1);
+                this.addBombRate(1);
             }
         }
 
@@ -154,7 +184,7 @@ public class Bomber extends Character {
     protected void calculateMove() {
         // TODO: xử lý nhận tín hiệu điều khiển hướng đi từ _input và gọi move() để thực hiện di chuyển
         // TODO: nhớ cập nhật lại giá trị cờ _moving khi thay đổi trạng thái di chuyển
-        double bomberSpeed = Game.getBomberSpeed();
+        double bomberSpeed = this.getBomberSpeed();
         double xa = _x + ((_input.left ? 1: 0) * -1 + (_input.right ? 1 : 0)) * bomberSpeed;
         double ya = _y + ((_input.up ? 1 : 0) * -1 + (_input.down ? 1 : 0)) * bomberSpeed;
         _moving = (xa != _x) || (ya != _y);
@@ -165,9 +195,9 @@ public class Bomber extends Character {
 
             int tileX = Coordinates.pixelToTile(_x);
             if ((tileX + 1) * tilesSize * 1.0 - _x < 1.5)
-                _x = Coordinates.tileToPixel(tileX + 1) + BOMBER_BEAUTY / 2;
+                _x = Coordinates.tileToPixel(tileX + 1);
             if (_x - tileX * tilesSize * 1.0  < 1.5)
-                _x = Coordinates.tileToPixel(tileX) + BOMBER_BEAUTY / 2;
+                _x = Coordinates.tileToPixel(tileX);
 
             int tileY = Coordinates.pixelToTile(_y);
             if ((tileY + 1) * tilesSize * 1.0  - _y < 2.5)
@@ -184,9 +214,9 @@ public class Bomber extends Character {
 
 
         Entity entityBottomLeft  = _board.getEntity(Coordinates.pixelToTile(x), Coordinates.pixelToTile(y - 1), this);
-        Entity entityBottomRight = _board.getEntity(Coordinates.pixelToTile(x + spriteSize - 1 - BOMBER_BEAUTY), Coordinates.pixelToTile(y - 1), this);
+        Entity entityBottomRight = _board.getEntity(Coordinates.pixelToTile(x + spriteSize - 1), Coordinates.pixelToTile(y - 1), this);
         Entity entityTopLeft     = _board.getEntity(Coordinates.pixelToTile(x), Coordinates.pixelToTile(y - spriteSize), this);
-        Entity entityTopRight    = _board.getEntity(Coordinates.pixelToTile(x + spriteSize - 1 - BOMBER_BEAUTY), Coordinates.pixelToTile(y - spriteSize), this);
+        Entity entityTopRight    = _board.getEntity(Coordinates.pixelToTile(x + spriteSize - 1), Coordinates.pixelToTile(y - spriteSize), this);
 
         // DEBUG
         // System.out.println("====================");
@@ -207,10 +237,15 @@ public class Bomber extends Character {
         // TODO: sử dụng canMove() để kiểm tra xem có thể di chuyển tới điểm đã tính toán hay không và thực hiện thay đổi tọa độ _x, _y
         // TODO: nhớ cập nhật giá trị _direction sau khi di chuyển
 
-        if      (_input.up)    _direction = Direction.UP;
-        else if (_input.right) _direction = Direction.RIGHT;
-        else if (_input.down)  _direction = Direction.DOWN;
-        else if (_input.left)  _direction = Direction.LEFT;
+        if (_input.up) {
+            _direction = Direction.UP;
+        } else if (_input.right) {
+            _direction = Direction.RIGHT;
+        } else if (_input.down)  {
+            _direction = Direction.DOWN;
+        } else if (_input.left)  {
+            _direction = Direction.LEFT;
+        }
 
         // DEBUG
         // System.out.println(xa + " " + ya + " " + canMove(xa, ya));
@@ -222,6 +257,24 @@ public class Bomber extends Character {
 
         if(canMove(xa, _y)) {
             _x = xa;
+        }
+    }
+
+    private void sliding(boolean vertical) {
+        int high = 9;
+        int low = 6;
+        if (vertical) {
+            int calc = (int)_x % Game.TILES_SIZE;
+
+            if (calc >= high || calc <= low) {
+                _x = Coordinates.tileToPixel(this.getXTile());
+            }
+        } else {
+            int calc = (int)_y % Game.TILES_SIZE;
+            System.out.println(calc);
+            if (calc >= high || calc <= low) {
+                _y = Coordinates.tileToPixel(this.getYTile());
+            }
         }
     }
 
@@ -272,10 +325,5 @@ public class Bomber extends Character {
                 }
                 break;
         }
-    }
-
-    public int getBomberBeauty()
-    {
-        return BOMBER_BEAUTY;
     }
 }

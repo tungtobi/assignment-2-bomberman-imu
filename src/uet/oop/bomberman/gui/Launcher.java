@@ -23,7 +23,6 @@ public class Launcher extends JFrame
 
     private void initComponents()
     {
-
         menuPanel = new JPanel();
         titleLabel = new JLabel();
         movement = new JLabel();

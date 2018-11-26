@@ -9,7 +9,7 @@ import uet.oop.bomberman.graphics.Sprite;
 public class Dall extends Enemy {
 
 	public Dall(int x, int y, Board board) {
-		super(x, y, board, Sprite.dall_dead, Game.getBomberSpeed(), 200);
+		super(x, y, board, Sprite.dall_dead, Game.getEnemySpeed(), 200);
 		
 		_sprite = Sprite.dall_left1;
 		

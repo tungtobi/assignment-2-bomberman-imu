@@ -2,14 +2,18 @@ package uet.oop.bomberman.entities.character.enemy;
 
 import uet.oop.bomberman.Board;
 import uet.oop.bomberman.Game;
+import uet.oop.bomberman.entities.Entity;
+import uet.oop.bomberman.entities.character.Bomber;
 import uet.oop.bomberman.entities.character.enemy.ai.AILow;
+import uet.oop.bomberman.entities.tile.destroyable.Brick;
+import uet.oop.bomberman.entities.tile.item.Item;
 import uet.oop.bomberman.graphics.Sprite;
 
 public class Balloon extends Enemy {
 	
 	
 	public Balloon(int x, int y, Board board) {
-		super(x, y, board, Sprite.balloom_dead, Game.getBomberSpeed() / 2, 100);
+		super(x, y, board, Sprite.balloom_dead, Game.getEnemySpeed() / 2, 100);
 		
 		_sprite = Sprite.balloom_left1;
 		
@@ -17,7 +21,7 @@ public class Balloon extends Enemy {
 		_direction = _ai.calculateDirection();
 	}
 
-	@Override
+    @Override
 	protected void chooseSprite() {
 		switch(_direction) {
 			case UP:

@@ -1,27 +1,29 @@
 package uet.oop.bomberman.entities.character.enemy.ai;
 
+import uet.oop.bomberman.Board;
 import uet.oop.bomberman.Game;
 import uet.oop.bomberman.entities.character.Bomber;
 import uet.oop.bomberman.entities.character.enemy.Enemy;
+import uet.oop.bomberman.entities.character.enemy.ai.aStarAlgorithm.AStar;
 import uet.oop.bomberman.entities.character.movement.Direction;
 import uet.oop.bomberman.entities.tile.Tile;
 
 public class AIMedium extends AI {
 	Bomber _bomber;
+	AStar aStar;
 
 	public AIMedium(Bomber bomber, Enemy e) {
 		super(e);
 	    _bomber = bomber;
+	    //aStar = new AStar(board, e, bomber);
 	}
 
 	@Override
 	public Direction calculateDirection() {
 		// TODO: cài đặt thuật toán tìm đường đi
-        if (_bomber == null || !isBomberNearly()) {
-            _e.setSpeed(Game.getBomberSpeed() / 2);
-            return randomDirection();
+        if (!isBomberNearly()) {
+            return _e.getDirection();
         }
-
         return followBomber();
 	}
 
@@ -74,16 +76,13 @@ public class AIMedium extends AI {
             return dir;
 
         if (Math.abs(_bomber.getX() - _e.getX()) < 0.5) {
-            _e.setSpeed(Game.getBomberSpeed());
+            //_e.setSpeed(Game.getBomberSpeed());
             dir = calculateRowDirection();
         }
         if (Math.abs(_bomber.getY() - _e.getY()) < 0.5) {
-            _e.setSpeed(Game.getBomberSpeed());
+            //_e.setSpeed(Game.getBomberSpeed());
             dir = calculateColDirection();
         }
-
-//        if (!canEnemyMove(dir))
-//            return randomDirection();
 
         return dir;
     }

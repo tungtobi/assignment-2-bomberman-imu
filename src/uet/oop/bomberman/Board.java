@@ -2,15 +2,19 @@ package uet.oop.bomberman;
 
 import uet.oop.bomberman.audio.MyAudioPlayer;
 import uet.oop.bomberman.entities.Entity;
+import uet.oop.bomberman.entities.LayeredEntity;
 import uet.oop.bomberman.entities.Message;
 import uet.oop.bomberman.entities.bomb.Bomb;
 import uet.oop.bomberman.entities.bomb.FlameSegment;
 import uet.oop.bomberman.entities.character.Bomber;
 import uet.oop.bomberman.entities.character.Character;
+import uet.oop.bomberman.entities.tile.Wall;
+import uet.oop.bomberman.entities.tile.destroyable.Brick;
 import uet.oop.bomberman.exceptions.LoadLevelException;
 import uet.oop.bomberman.graphics.IRender;
 import uet.oop.bomberman.graphics.Screen;
 import uet.oop.bomberman.input.Keyboard;
+import uet.oop.bomberman.level.Coordinates;
 import uet.oop.bomberman.level.FileLevelLoader;
 import uet.oop.bomberman.level.LevelLoader;
 
@@ -46,7 +50,6 @@ public class Board implements IRender {
 		_screen = screen;
 
 		_musicPlayer = new MyAudioPlayer(MyAudioPlayer.BACKGROUND_MUSIC);
-		_musicPlayer.loop();
 
 		loadLevel(1); //start in level 1
 	}
@@ -58,6 +61,8 @@ public class Board implements IRender {
                 loadLevel(1);
 		    //return;
         }
+
+//        System.out.println(blockedAt(10, 10));
 		
 		updateEntities();
 		updateCharacters();
@@ -104,7 +109,8 @@ public class Board implements IRender {
 		_characters.clear();
 		_bombs.clear();
 		_messages.clear();
-		
+		_musicPlayer.loop();
+
 		try {
 			_levelLoader = new FileLevelLoader(this, level);
 			_entities = new Entity[_levelLoader.getHeight() * _levelLoader.getWidth()];
@@ -121,7 +127,6 @@ public class Board implements IRender {
 	
 	public void endGame() {
 		_screenToShow = 1;
-		_musicPlayer.stop();
 		_game.resetScreenDelay();
 		_game.pause();
 
@@ -173,7 +178,13 @@ public class Board implements IRender {
 	public List<Bomb> getBombs() {
 		return _bombs;
 	}
-	
+
+	public boolean blockedAt(double x, double y) {
+	    Entity entity = this.getEntityAt(x, y);
+        //System.out.println(entity);
+	    return (entity instanceof Wall || entity instanceof Brick || entity instanceof LayeredEntity);
+    }
+
 	public Bomb getBombAt(double x, double y) {
 		Iterator<Bomb> bs = _bombs.iterator();
 		Bomb b;
@@ -322,7 +333,7 @@ public class Board implements IRender {
 	}
 
 	public int subtractTime() {
-		if(_game.isPaused())
+		if (_game.isPaused())
 			return this._time;
 		else
 			return this._time--;
@@ -371,6 +382,8 @@ public class Board implements IRender {
 	public int getWidth() {
 		return _levelLoader.getWidth();
 	}
+
+
 
 	public int getHeight() {
 		return _levelLoader.getHeight();

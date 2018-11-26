@@ -9,7 +9,7 @@ import uet.oop.bomberman.graphics.Sprite;
 public class Doria extends Enemy {
 
 	public Doria(int x, int y, Board board) {
-		super(x, y, board, Sprite.kondoria_dead, Game.getBomberSpeed(), 200);
+		super(x, y, board, Sprite.kondoria_dead, Game.getEnemySpeed(), 200);
 		
 		_sprite = Sprite.kondoria_left1;
 		

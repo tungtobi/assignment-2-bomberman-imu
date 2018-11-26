@@ -32,13 +32,12 @@ public class Frame extends JFrame {
 		add(_containerpane);
 		
 		setResizable(false);
-		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		pack();
 		setLocationRelativeTo(null);
 		setVisible(true);	
 		
 		_game.start();
-		dispose();
 	}
 	
 	public void setTime(int time) {

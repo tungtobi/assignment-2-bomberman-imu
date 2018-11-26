@@ -10,7 +10,7 @@ import uet.oop.bomberman.graphics.Sprite;
 public class Ovape extends Enemy {
 
 	public Ovape(int x, int y, Board board) {
-		super(x, y, board, Sprite.ovape_dead, Game.getBomberSpeed(), 200);
+		super(x, y, board, Sprite.ovape_dead, Game.getEnemySpeed(), 200);
 		
 		_sprite = Sprite.ovape_left1;
 		

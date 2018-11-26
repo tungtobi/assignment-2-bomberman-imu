@@ -3,6 +3,7 @@ package uet.oop.bomberman.entities.character.enemy;
 import sun.font.CoreMetrics;
 import uet.oop.bomberman.Board;
 import uet.oop.bomberman.Game;
+import uet.oop.bomberman.audio.MyAudioPlayer;
 import uet.oop.bomberman.entities.Entity;
 import uet.oop.bomberman.entities.Message;
 import uet.oop.bomberman.entities.bomb.Bomb;
@@ -14,6 +15,7 @@ import uet.oop.bomberman.entities.tile.Portal;
 import uet.oop.bomberman.entities.character.Bomber;
 import uet.oop.bomberman.entities.character.Character;
 import uet.oop.bomberman.entities.character.enemy.ai.AI;
+import uet.oop.bomberman.entities.tile.destroyable.Brick;
 import uet.oop.bomberman.graphics.Screen;
 import uet.oop.bomberman.graphics.Sprite;
 import uet.oop.bomberman.level.Coordinates;
@@ -140,7 +142,10 @@ public abstract class Enemy extends Character {
 		}
 
 		if (e instanceof Enemy)
-			return false;
+			return true;
+
+		if (e instanceof Item)
+			return true;
 
 		return e.collide(this);
 	}
@@ -154,6 +159,9 @@ public abstract class Enemy extends Character {
 
 		Message msg = new Message("+" + _points, getXMessage(), getYMessage(), 2, Color.white, 14);
 		_board.addMessage(msg);
+
+		MyAudioPlayer placeSound = new MyAudioPlayer(MyAudioPlayer.ENEMY_DEAD);
+		placeSound.play();
 	}
 	
 	
@@ -173,7 +181,7 @@ public abstract class Enemy extends Character {
         return _speed;
     }
 
-    public void setSpeed(double speed) {
-        this._speed = speed;
+    public void addSpeed() {
+        _speed += 0.2;
     }
 }

@@ -23,6 +23,7 @@ public class Launcher extends JFrame
 
     private void initComponents()
     {
+        closeBtn = new JButton();
         menuPanel = new JPanel();
         titleLabel = new JLabel();
         movement = new JLabel();
@@ -38,7 +39,17 @@ public class Launcher extends JFrame
         setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
         setMaximumSize(new Dimension(1150, 630));
         setResizable(false);
+        setExtendedState(JFrame.MAXIMIZED_BOTH);
+        setUndecorated(true);
         getContentPane().setLayout(new AbsoluteLayout());
+
+        closeBtn.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/close.png"))); 
+        closeBtn.setBorder(BorderFactory.createEmptyBorder(1, 1, 1, 1));
+        closeBtn.setBorderPainted(false);
+        closeBtn.setContentAreaFilled(false);
+        closeBtn.addActionListener(this::quitBtnActionPerformed);
+        closeBtn.setForeground(new Color(255, 255, 255));
+        getContentPane().add(closeBtn, new org.netbeans.lib.awtextra.AbsoluteConstraints(1115, 1, 32, 32));
 
         infoPanel.setBackground(new Color(35, 35, 35, 200));
         infoPanel.setBorder(BorderFactory.createEmptyBorder(1, 1, 1, 1));
@@ -184,5 +195,6 @@ public class Launcher extends JFrame
     private JButton playBtn;
     private JButton quitBtn;
     private JButton backBtn;
+    private JButton closeBtn;
     private JLabel titleLabel;
 }

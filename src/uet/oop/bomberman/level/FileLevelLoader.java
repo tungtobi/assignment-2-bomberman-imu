@@ -10,7 +10,14 @@ import uet.oop.bomberman.Game;
 import uet.oop.bomberman.entities.LayeredEntity;
 import uet.oop.bomberman.entities.character.Bomber;
 import uet.oop.bomberman.entities.character.enemy.Balloon;
+import uet.oop.bomberman.entities.character.enemy.Dall;
+import uet.oop.bomberman.entities.character.enemy.Doria;
+import uet.oop.bomberman.entities.character.enemy.Enemy;
+import uet.oop.bomberman.entities.character.enemy.Minvo;
 import uet.oop.bomberman.entities.character.enemy.Oneal;
+import uet.oop.bomberman.entities.character.enemy.Ovape;
+import uet.oop.bomberman.entities.character.enemy.Pass;
+import uet.oop.bomberman.entities.character.enemy.Pontan;
 import uet.oop.bomberman.entities.tile.Grass;
 import uet.oop.bomberman.entities.tile.Wall;
 import uet.oop.bomberman.entities.tile.Portal;
@@ -140,6 +147,42 @@ public class FileLevelLoader extends LevelLoader {
 						int xOneal = j, yOneal = i;
 						_board.addCharacter( new Oneal(Coordinates.tileToPixel(xOneal), Coordinates.tileToPixel(yOneal) + Game.TILES_SIZE, _board));
 						_board.addEntity(xOneal + yOneal * _width, new Grass(xOneal, yOneal, Sprite.grass));
+						break;
+					case '3':
+						// thêm Enemy
+						int xDall = j, yDall = i;
+						_board.addCharacter( new Dall(Coordinates.tileToPixel(xDall), Coordinates.tileToPixel(yDall) + Game.TILES_SIZE, _board));
+						_board.addEntity(xDall + yDall * _width, new Grass(xDall, yDall, Sprite.grass));
+						break;
+					case '4':
+						// thêm Enemy
+						int xMinvo = j, yMinvo = i;
+						_board.addCharacter( new Minvo(Coordinates.tileToPixel(xMinvo), Coordinates.tileToPixel(yMinvo) + Game.TILES_SIZE, _board));
+						_board.addEntity(xMinvo + yMinvo * _width, new Grass(xMinvo, yMinvo, Sprite.grass));
+						break;
+					case '5':
+						// thêm Enemy
+						int xDoria = j, yDoria = i;
+						_board.addCharacter( new Doria(Coordinates.tileToPixel(xDoria), Coordinates.tileToPixel(yDoria) + Game.TILES_SIZE, _board));
+						_board.addEntity(xDoria + yDoria * _width, new Grass(xDoria, yDoria, Sprite.grass));
+						break;
+					case '6':
+						// thêm Enemy
+						int xOvape = j, yOvape = i;
+						_board.addCharacter( new Ovape(Coordinates.tileToPixel(xOvape), Coordinates.tileToPixel(yOvape) + Game.TILES_SIZE, _board));
+						_board.addEntity(xOvape + yOvape * _width, new Grass(xOvape, yOvape, Sprite.grass));
+						break;
+					case '7':
+						// thêm Enemy
+						int xPontan = j, yPontan = i;
+						_board.addCharacter( new Pontan(Coordinates.tileToPixel(xPontan), Coordinates.tileToPixel(yPontan) + Game.TILES_SIZE, _board));
+						_board.addEntity(xPontan + yPontan * _width, new Grass(xPontan, yPontan, Sprite.grass));
+						break;
+					case '8':
+						// thêm Enemy
+						int xPass = j, yPass = i;
+						_board.addCharacter( new Pass(Coordinates.tileToPixel(xPass), Coordinates.tileToPixel(yPass) + Game.TILES_SIZE, _board));
+						_board.addEntity(xPass + yPass * _width, new Grass(xPass, yPass, Sprite.grass));
 						break;
 					case 'b':
 						// thêm Bomb Item kèm Brick che phủ ở trên

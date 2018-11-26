@@ -121,6 +121,7 @@ public class Board implements IRender {
 	
 	public void endGame() {
 		_screenToShow = 1;
+		_musicPlayer.stop();
 		_game.resetScreenDelay();
 		_game.pause();
 

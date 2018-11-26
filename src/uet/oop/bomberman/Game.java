@@ -148,8 +148,17 @@ public class Game extends Canvas {
 				_frame.setTitle(TITLE + " | " + updates + " rate, " + frames + " fps");
 				updates = 0;
 				frames = 0;
+
+				if (_board.getShow() == 1 && _screenDelay == 1)
+					stop();
+
+				if (!_frame.isDisplayable())
+				{
+					_board.endGame();
+					stop();
+				}
 				
-				if(_board.getShow() == 2)
+				if(_board.getShow() == 2 || _board.getShow() == 1)
 					--_screenDelay;
 			}
 		}
@@ -181,6 +190,10 @@ public class Game extends Canvas {
 
 	public void resetScreenDelay() {
 		_screenDelay = SCREENDELAY;
+	}
+
+	public void stop() {
+		_running = false;
 	}
 
 	public Board getBoard() {

@@ -5,15 +5,14 @@ import uet.oop.bomberman.Board;
 import uet.oop.bomberman.Game;
 import uet.oop.bomberman.entities.character.enemy.ai.AIMedium;
 import uet.oop.bomberman.entities.character.movement.Direction;
-import uet.oop.bomberman.entities.character.movement.DirectionConverter;
 import uet.oop.bomberman.graphics.Sprite;
 
-public class Oneal extends Enemy {
-	
-	public Oneal(int x, int y, Board board) {
-		super(x, y, board, Sprite.oneal_dead, Game.getBomberSpeed(), 200);
+public class Ovape extends Enemy {
+
+	public Ovape(int x, int y, Board board) {
+		super(x, y, board, Sprite.ovape_dead, Game.getBomberSpeed(), 200);
 		
-		_sprite = Sprite.oneal_left1;
+		_sprite = Sprite.ovape_left1;
 		
 		_ai = new AIMedium(_board.getBomber(), this);
 		_direction  = _ai.calculateDirection();
@@ -25,16 +24,16 @@ public class Oneal extends Enemy {
 			case UP:
 			case RIGHT:
 				if(_moving)
-					_sprite = Sprite.movingSprite(Sprite.oneal_right1, Sprite.oneal_right2, Sprite.oneal_right3, _animate, 60);
+					_sprite = Sprite.movingSprite(Sprite.ovape_right1, Sprite.ovape_right2, Sprite.ovape_right3, _animate, 60);
 				else
-					_sprite = Sprite.oneal_left1;
+					_sprite = Sprite.ovape_left1;
 				break;
             case DOWN:
             case LEFT:
 				if(_moving)
-					_sprite = Sprite.movingSprite(Sprite.oneal_left1, Sprite.oneal_left2, Sprite.oneal_left3, _animate, 60);
+					_sprite = Sprite.movingSprite(Sprite.ovape_left1, Sprite.ovape_left2, Sprite.ovape_left3, _animate, 60);
 				else
-					_sprite = Sprite.oneal_left1;
+					_sprite = Sprite.ovape_left1;
 				break;
 		}
 	}

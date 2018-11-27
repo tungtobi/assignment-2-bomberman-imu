@@ -10,15 +10,22 @@ public class Keyboard implements KeyListener {
 	
 	private boolean[] keys = new boolean[120]; //120 is enough to this game
 	public boolean up, down, left, right, space, pause;
-	
+	public boolean vk_a, vk_s, vk_d, vk_w, vk_j;
+
 	public void update() {
-		up = keys[KeyEvent.VK_UP] || keys[KeyEvent.VK_W];
-		down = keys[KeyEvent.VK_DOWN] || keys[KeyEvent.VK_S];
-		left = keys[KeyEvent.VK_LEFT] || keys[KeyEvent.VK_A];
-		right = keys[KeyEvent.VK_RIGHT] || keys[KeyEvent.VK_D];
-		space = keys[KeyEvent.VK_SPACE] || keys[KeyEvent.VK_J];
+		up = keys[KeyEvent.VK_UP];
+		down = keys[KeyEvent.VK_DOWN];
+		left = keys[KeyEvent.VK_LEFT];
+		right = keys[KeyEvent.VK_RIGHT];
+		space = keys[KeyEvent.VK_SPACE];
 		pause = keys[KeyEvent.VK_P];
-	}
+
+		vk_a = keys[KeyEvent.VK_A];
+        vk_s = keys[KeyEvent.VK_S];
+        vk_d = keys[KeyEvent.VK_D];
+        vk_w = keys[KeyEvent.VK_W];
+        vk_j = keys[KeyEvent.VK_J];
+    }
 
 	@Override
 	public void keyTyped(KeyEvent e) {}
@@ -26,7 +33,7 @@ public class Keyboard implements KeyListener {
 	@Override
 	public void keyPressed(KeyEvent e) {
 		keys[e.getKeyCode()] = true;
-		
+
 	}
 
 	@Override
@@ -34,5 +41,4 @@ public class Keyboard implements KeyListener {
 		keys[e.getKeyCode()] = false;
 		
 	}
-
 }

@@ -8,6 +8,7 @@ import java.io.FileNotFoundException;
 import uet.oop.bomberman.Board;
 import uet.oop.bomberman.Game;
 import uet.oop.bomberman.entities.LayeredEntity;
+import uet.oop.bomberman.entities.character.BlueBomber;
 import uet.oop.bomberman.entities.character.Bomber;
 import uet.oop.bomberman.entities.character.enemy.Balloon;
 import uet.oop.bomberman.entities.character.enemy.Dall;
@@ -48,7 +49,6 @@ public class FileLevelLoader extends LevelLoader {
 		String path = "/levels/Level" + String.valueOf(level) + ".txt"; 
 		try
 		{
-			// ClassLoader classLoader = getClass().getClassLoader();
 			InputStream in = getClass().getResourceAsStream(path);
 			Scanner scanner = new Scanner(in, "UTF-8");
 
@@ -129,13 +129,23 @@ public class FileLevelLoader extends LevelLoader {
 						);
 						break;
 					case 'p':
-						// thêm Bomber
-						int xBomber = j, yBomber = i;
-					
-						_board.addCharacter( new Bomber(Coordinates.tileToPixel(xBomber), Coordinates.tileToPixel(yBomber) + Game.TILES_SIZE, _board) );
-						Screen.setOffset(0, 0);
-						_board.addEntity(xBomber + yBomber * _width, new Grass(xBomber, yBomber, Sprite.grass));
-						break;
+                        // thêm Bomber
+                        int xBomber = j, yBomber = i;
+                        Bomber bomber = new Bomber(Coordinates.tileToPixel(xBomber), Coordinates.tileToPixel(yBomber) + Game.TILES_SIZE, _board);
+                        _board.getGame().updateBomberData(bomber);
+                        _board.addCharacter(bomber);
+                        Screen.setOffset(0, 0);
+                        _board.addEntity(xBomber + yBomber * _width, new Grass(xBomber, yBomber, Sprite.grass));
+                        break;
+                    case 'z':
+                        // thêm Blue Bomber
+                        int xBlueBomber = j, yBlueBomber = i;
+                        Bomber blueBomber = new BlueBomber(Coordinates.tileToPixel(xBlueBomber), Coordinates.tileToPixel(yBlueBomber) + Game.TILES_SIZE, _board);
+                        _board.getGame().updateBomberData(blueBomber);
+                        _board.addCharacter(blueBomber);
+                        Screen.setOffset(0, 0);
+                        _board.addEntity(xBlueBomber + yBlueBomber * _width, new Grass(xBlueBomber, yBlueBomber, Sprite.grass));
+                        break;
 					case '1':
 						// thêm Enemy
 						int xBalloon = j, yBalloon = i;

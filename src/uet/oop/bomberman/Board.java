@@ -62,8 +62,6 @@ public class Board implements IRender {
 		    //return;
         }
 
-//        System.out.println(blockedAt(10, 10));
-		
 		updateEntities();
 		updateCharacters();
 		updateBombs();

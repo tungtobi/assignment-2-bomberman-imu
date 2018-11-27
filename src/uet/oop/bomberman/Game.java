@@ -1,5 +1,6 @@
 package uet.oop.bomberman;
 
+import uet.oop.bomberman.entities.character.Bomber;
 import uet.oop.bomberman.graphics.Screen;
 import uet.oop.bomberman.gui.Frame;
 import uet.oop.bomberman.input.Keyboard;
@@ -34,9 +35,12 @@ public class Game extends Canvas {
 	protected static int SCREENDELAY = 3;
 
 	protected static double enemySpeed = ENEMYSPEED;
-	
-	
+
 	protected int _screenDelay = SCREENDELAY;
+
+	private int _bombRate = Game.BOMBRATE;
+    private double _bomberSpeed = Game.BOMBERSPEED;
+    private int _bombRadius = Game.BOMBRADIUS;
 	
 	private Keyboard _input;
 	public boolean _running = false;
@@ -59,8 +63,7 @@ public class Game extends Canvas {
 		_board = new Board(this, _input, screen);
 		addKeyListener(_input);
 	}
-	
-	
+
 	private void renderGame() {
 		BufferStrategy bs = getBufferStrategy();
 		if(bs == null) {
@@ -162,6 +165,15 @@ public class Game extends Canvas {
 		}
 	}
 	
+    public void saveBomberData(Bomber bomber) {
+	    _bombRate = bomber.getBombRate();
+	    _bomberSpeed = bomber.getBomberSpeed();
+	    _bombRadius = bomber.getBombRadius();
+    }
+
+    public void updateBomberData(Bomber bomber) {
+	    bomber.updateData(_bombRate, _bomberSpeed, _bombRadius);
+    }
 
     public static double getEnemySpeed() {
         return enemySpeed;

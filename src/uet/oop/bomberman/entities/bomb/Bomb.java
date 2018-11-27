@@ -22,11 +22,14 @@ public class Bomb extends AnimatedEntitiy {
 	protected boolean _allowedToPassThru = true;
     protected int _bombRadius = Game.BOMBRADIUS;
 
-    public Bomb(int x, int y, int radius, Board board) {
+    private Bomber _owner;
+
+    public Bomb(int x, int y, Bomber owner, Board board) {
 		_x = x;
 		_y = y;
 		_board = board;
-		_bombRadius = radius;
+		_owner = owner;
+		_bombRadius = owner.getBombRadius();
 		_sprite = Sprite.bomb;
 	}
 	
@@ -141,4 +144,8 @@ public class Bomb extends AnimatedEntitiy {
         }
         return false;
 	}
+
+    public Bomber getOwner() {
+        return _owner;
+    }
 }

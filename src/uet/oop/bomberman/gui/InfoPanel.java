@@ -19,26 +19,14 @@ public class InfoPanel extends JPanel {
 	public InfoPanel(Game game) {
 		setLayout(new GridLayout());
 
-//		Font fontPixel = null;
-//
-//        try {
-//            InputStream in = getClass().getResourceAsStream("/font/OCR-a___.ttf");
-//            fontPixel = Font.createFont(Font.TRUETYPE_FONT, in);
-//            fontPixel.deriveFont(50.0f);
-//        } catch (FontFormatException | IOException e) {
-//            e.printStackTrace();
-//        }
-//
 		timeLabel = new JLabel("Time: " + game.getBoard().getTime());
 		timeLabel.setForeground(Color.white);
 		timeLabel.setHorizontalAlignment(JLabel.CENTER);
-//		timeLabel.setFont(fontPixel);
 
-		pointsLabel = new JLabel("Points: " + game.getBoard().getPoints());
+		pointsLabel = new JLabel("Score: " + game.getBoard().getPoints());
 		pointsLabel.setForeground(Color.white);
 		pointsLabel.setHorizontalAlignment(JLabel.CENTER);
-//		pointsLabel.setFont(fontPixel);
-		
+
 		add(timeLabel);
 		add(pointsLabel);
 		

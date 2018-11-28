@@ -18,8 +18,6 @@ public class BlueBomber extends Bomber {
 
     @Override
     public void render(Screen screen) {
-        calculateXOffset();
-
         if (_alive)
             chooseSprite();
         else {

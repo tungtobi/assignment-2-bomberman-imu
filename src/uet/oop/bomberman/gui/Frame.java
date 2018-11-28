@@ -1,5 +1,6 @@
 package uet.oop.bomberman.gui;
 
+import uet.oop.bomberman.BombermanGame;
 import uet.oop.bomberman.Game;
 import uet.oop.bomberman.audio.MyAudioPlayer;
 
@@ -14,12 +15,12 @@ public class Frame extends JFrame {
 	public GamePanel _gamepane;
 	private JPanel _containerpane;
 	private InfoPanel _infopanel;
-
+	private BombermanGame.State _mode;
 	
 	private Game _game;
 
-	public Frame() {
-		
+	public Frame(BombermanGame.State mode) {
+		_mode = mode;
 		_containerpane = new JPanel(new BorderLayout());
 		_gamepane = new GamePanel(this);
 		_infopanel = new InfoPanel(_gamepane.getGame());
@@ -40,7 +41,11 @@ public class Frame extends JFrame {
 		_game.start();
 		dispose();
 	}
-	
+
+	public BombermanGame.State getMode() {
+		return _mode;
+	}
+
 	public void setTime(int time) {
 		_infopanel.setTime(time);
 	}

@@ -41,7 +41,9 @@ public class Game extends Canvas {
 	private int _bombRate = Game.BOMBRATE;
     private double _bomberSpeed = Game.BOMBERSPEED;
     private int _bombRadius = Game.BOMBRADIUS;
-	
+
+    private BombermanGame.State _mode;
+
 	private Keyboard _input;
 	public boolean _running = false;
 	public boolean _paused = true;
@@ -59,8 +61,10 @@ public class Game extends Canvas {
 		
 		screen = new Screen(WIDTH, HEIGHT);
 		_input = new Keyboard();
-		
-		_board = new Board(this, _input, screen);
+
+        _mode = frame.getMode();
+
+		_board = new Board(this, _input, screen, _mode);
 		addKeyListener(_input);
 	}
 
@@ -169,6 +173,10 @@ public class Game extends Canvas {
 	    _bombRate = bomber.getBombRate();
 	    _bomberSpeed = bomber.getBomberSpeed();
 	    _bombRadius = bomber.getBombRadius();
+    }
+
+    public BombermanGame.State getMode() {
+        return _mode;
     }
 
     public void updateBomberData(Bomber bomber) {

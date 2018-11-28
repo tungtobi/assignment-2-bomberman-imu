@@ -1,6 +1,7 @@
 package uet.oop.bomberman.entities.character;
 
 import uet.oop.bomberman.Board;
+import uet.oop.bomberman.BombermanGame;
 import uet.oop.bomberman.Game;
 import uet.oop.bomberman.audio.MyAudioPlayer;
 import uet.oop.bomberman.entities.Entity;
@@ -70,7 +71,8 @@ public class Bomber extends Character {
 
     @Override
     public void render(Screen screen) {
-        calculateXOffset();
+        if (_board.getGame().getMode() == BombermanGame.State.SINGlE)
+            calculateXOffset();
 
         if (_alive)
             chooseSprite();

@@ -23,6 +23,8 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import static uet.oop.bomberman.BombermanGame.musicPlayer;
+
 /**
  * Quản lý thao tác điều khiển, load level, render các màn hình của game
  */
@@ -31,8 +33,6 @@ public class Board implements IRender {
 	protected Game _game;
 	protected Keyboard _input;
 	protected Screen _screen;
-
-	private MyAudioPlayer _musicPlayer;
 	
 	public Entity[] _entities;
 	public List<Character> _characters = new ArrayList<>();
@@ -44,14 +44,20 @@ public class Board implements IRender {
 	private int _time = Game.TIME;
 	private int _points = Game.POINTS;
 	
-	public Board(Game game, Keyboard input, Screen screen) {
+	public Board(Game game, Keyboard input, Screen screen, BombermanGame.State mode) {
 		_game = game;
 		_input = input;
 		_screen = screen;
 
-		_musicPlayer = new MyAudioPlayer(MyAudioPlayer.BACKGROUND_MUSIC);
+		switch (mode) {
+            case SINGlE:
+                loadLevel(1); // start in level 1
+                break;
+            case MULTY:
+                loadLevel(0); // multy player mode
+                break;
+        }
 
-		loadLevel(1); //start in level 1
 	}
 	
 	@Override
@@ -77,18 +83,33 @@ public class Board implements IRender {
 	@Override
 	public void render(Screen screen) {
 		if( _game.isPaused() ) return;
-		
-		//only render the visible part of screen
-		int x0 = Screen.xOffset >> 4; //tile precision, -> left X
-		int x1 = (Screen.xOffset + screen.getWidth() + Game.TILES_SIZE) / Game.TILES_SIZE; // -> right X
-		int y0 = Screen.yOffset >> 4;
-		int y1 = (Screen.yOffset + screen.getHeight()) / Game.TILES_SIZE; //render one tile plus to fix black margins
-		
-		for (int y = y0; y < y1; y++) {
-			for (int x = x0; x < x1; x++) {
-				_entities[x + y * _levelLoader.getWidth()].render(screen);
-			}
-		}
+
+		switch (_game.getMode()) {
+            case SINGlE:
+                //only render the visible part of screen
+                int x0 = Screen.xOffset >> 4; //tile precision, -> left X
+                int x1 = (Screen.xOffset + screen.getWidth() + Game.TILES_SIZE) / Game.TILES_SIZE; // -> right X
+                int y0 = Screen.yOffset >> 4;
+                int y1 = (Screen.yOffset + screen.getHeight()) / Game.TILES_SIZE; //render one tile plus to fix black margins
+
+                for (int y = y0; y < y1; y++) {
+                    for (int x = x0; x < x1; x++) {
+                        try {
+                            _entities[x + y * _levelLoader.getWidth()].render(screen);
+                        } catch (ArrayIndexOutOfBoundsException e) {}
+                    }
+                }
+
+                break;
+            case MULTY:
+                for (int y = 0; y < 13; y++) {
+                    for (int x = 0; x < 15; x++) {
+                        try {
+                            _entities[x + y * _levelLoader.getWidth()].render(screen);
+                        } catch (ArrayIndexOutOfBoundsException e) {}
+                    }
+                }
+        }
 		
 		renderBombs(screen);
 		renderCharacter(screen);
@@ -107,7 +128,7 @@ public class Board implements IRender {
 		_characters.clear();
 		_bombs.clear();
 		_messages.clear();
-		_musicPlayer.loop();
+		musicPlayer.loop();
 
 		try {
 			_levelLoader = new FileLevelLoader(this, level);
@@ -125,7 +146,7 @@ public class Board implements IRender {
 	
 	public void endGame() {
 		_screenToShow = 1;
-		_musicPlayer.stop();
+		musicPlayer.stop();
 		_game.resetScreenDelay();
 		_game.pause();
 
@@ -339,11 +360,11 @@ public class Board implements IRender {
 	}
 
 	public MyAudioPlayer getMusicPlayer() {
-		return _musicPlayer;
+		return musicPlayer;
 	}
 
 	public void setMusicPlayer(MyAudioPlayer _musicPlayer) {
-		this._musicPlayer = _musicPlayer;
+		musicPlayer = _musicPlayer;
 	}
 
 	public Keyboard getInput() {

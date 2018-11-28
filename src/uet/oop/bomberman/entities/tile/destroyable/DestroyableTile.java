@@ -29,8 +29,9 @@ public class DestroyableTile extends Tile {
 			else _animate = 0;
 			if(_timeToDisapear > 0) 
 				_timeToDisapear--;
-			else
-				remove();
+			else {
+			    remove();
+			}
 		}
 	}
 

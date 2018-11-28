@@ -8,6 +8,8 @@ import uet.oop.bomberman.entities.bomb.Bomb;
 import uet.oop.bomberman.entities.bomb.FlameSegment;
 import uet.oop.bomberman.entities.character.Bomber;
 import uet.oop.bomberman.entities.character.Character;
+import uet.oop.bomberman.entities.character.enemy.Doria;
+import uet.oop.bomberman.entities.tile.Grass;
 import uet.oop.bomberman.entities.tile.Wall;
 import uet.oop.bomberman.entities.tile.destroyable.Brick;
 import uet.oop.bomberman.exceptions.LoadLevelException;
@@ -36,7 +38,7 @@ public class Board implements IRender {
 	
 	public Entity[] _entities;
 	public List<Character> _characters = new ArrayList<>();
-	protected List<Bomb> _bombs = new ArrayList<>();
+	public List<Bomb> _bombs = new ArrayList<>();
 	private List<Message> _messages = new ArrayList<>();
 	
 	private int _screenToShow = -1; //1:endgame, 2:changelevel, 3:paused
@@ -178,7 +180,6 @@ public class Board implements IRender {
 	
 	// WARN: x, y are tile coordinates
 	public Entity getEntity(double x, double y, Character m) {
-		
 		Entity res = null;
 		
 		res = getFlameSegmentAt((int)x, (int)y);
@@ -194,15 +195,41 @@ public class Board implements IRender {
 		
 		return res;
 	}
+
+	public Entity getBlock(int x, int y) {
+        Entity res = null;
+
+        res = getFlameSegmentAt(x, y);
+        if( res != null) return res;
+
+        res = getBombAt(x, y);
+        if( res != null) return res;
+
+        if( res != null) return res;
+
+        res = getEntityAt(x, y);
+
+        return res;
+    }
 	
 	public List<Bomb> getBombs() {
 		return _bombs;
 	}
 
-	public boolean blockedAt(double x, double y) {
-	    Entity entity = this.getEntityAt(x, y);
-        //System.out.println(entity);
-	    return (entity instanceof Wall || entity instanceof Brick || entity instanceof LayeredEntity);
+	public boolean blockedAt(Character character, int x, int y) {
+        Entity entity = getBlock(x, y);
+
+        if (entity instanceof LayeredEntity) {
+            LayeredEntity layer = (LayeredEntity) entity;
+            Entity topEntity = layer.getTopEntity();
+            if (topEntity instanceof Brick) {
+                return !(character instanceof Doria);
+            } else {
+                return false;
+            }
+        }
+
+        return !(entity instanceof Grass);
     }
 
 	public Bomb getBombAt(double x, double y) {
@@ -402,8 +429,6 @@ public class Board implements IRender {
 	public int getWidth() {
 		return _levelLoader.getWidth();
 	}
-
-
 
 	public int getHeight() {
 		return _levelLoader.getHeight();

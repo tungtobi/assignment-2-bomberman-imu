@@ -12,6 +12,7 @@ public class QuitButton extends Button {
 
     @Override
     public void actionPerformed(ActionEvent e) {
+        onClickSound();
         System.exit(0);
     }
 }

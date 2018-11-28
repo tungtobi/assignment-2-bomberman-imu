@@ -14,7 +14,7 @@ public class Oneal extends Enemy {
 		
 		_sprite = Sprite.oneal_left1;
 		
-		_ai = new AIMedium(_board.getBomber(), this);
+		_ai = new AIMedium(_board, _board.getBomber(), this);
 		_direction  = _ai.randomDirection();
 	}
 
@@ -23,7 +23,10 @@ public class Oneal extends Enemy {
         double xa = 0;
         double ya = 0;
 
-		_direction = _ai.calculateDirection();
+        Direction dir = _ai.calculateDirection();
+        if (dir != Direction.NONE) {
+            _direction = dir;
+        }
 
 		if (_direction == Direction.UP)
             ya -= _speed;

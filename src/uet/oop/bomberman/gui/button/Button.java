@@ -1,6 +1,7 @@
 package uet.oop.bomberman.gui.button;
 
 import uet.oop.bomberman.BombermanGame;
+import uet.oop.bomberman.audio.MyAudioPlayer;
 import uet.oop.bomberman.gui.Launcher;
 import uet.oop.bomberman.gui.MyColor;
 import uet.oop.bomberman.gui.MyFont;
@@ -8,6 +9,7 @@ import uet.oop.bomberman.input.Mouse;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 
@@ -33,5 +35,10 @@ public abstract class Button extends JButton implements ActionListener {
         setFocusPainted(false);
         addActionListener(this);
         addMouseListener(new Mouse());
+    }
+
+    protected void onClickSound() {
+        MyAudioPlayer click = new MyAudioPlayer(MyAudioPlayer.PLACE_BOMB);
+        click.play();
     }
 }

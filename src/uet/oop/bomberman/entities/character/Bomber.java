@@ -41,9 +41,9 @@ public class Bomber extends Character {
 
     @Override
     public void update() {
-        if (_input.pause) {
-            isPause = !isPause;
-        }
+//        if (_input.pause) {
+//            isPause = !isPause;
+//        }
 
         if (isPause) {
             _board.getGame().pause();
@@ -107,8 +107,6 @@ public class Bomber extends Character {
             _timeBetweenPutBombs = TIME_TO_PUT_BOMB;
             this.addBombRate(-1);
         }
-
-        System.out.println(getBombRate());
     }
 
     public void addBombRate(int i) {

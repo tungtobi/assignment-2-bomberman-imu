@@ -12,6 +12,7 @@ public class HowToPlayButton extends Button {
 
     @Override
     public void actionPerformed(ActionEvent e) {
+        onClickSound();
         launcher.getInfoPanel().setVisible(true);
         launcher.getMenuPanel().setVisible(false);
     }

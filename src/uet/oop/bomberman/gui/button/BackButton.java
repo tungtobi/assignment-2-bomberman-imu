@@ -12,6 +12,7 @@ public class BackButton extends Button {
 
     @Override
     public void actionPerformed(ActionEvent e) {
+        onClickSound();
         launcher.getInfoPanel().setVisible(false);
         launcher.getMenuPanel().setVisible(true);
     }

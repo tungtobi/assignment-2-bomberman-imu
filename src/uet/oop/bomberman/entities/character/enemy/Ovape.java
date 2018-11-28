@@ -14,7 +14,7 @@ public class Ovape extends Enemy {
 		
 		_sprite = Sprite.ovape_left1;
 		
-		_ai = new AIMedium(_board.getBomber(), this);
+		_ai = new AIMedium(_board, _board.getBomber(), this);
 		_direction  = _ai.calculateDirection();
 	}
 

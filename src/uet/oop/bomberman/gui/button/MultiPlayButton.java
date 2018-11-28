@@ -12,6 +12,7 @@ public class MultiPlayButton extends Button {
 
     @Override
     public void actionPerformed(ActionEvent e) {
+        onClickSound();
         launcher.getGame().changeState(BombermanGame.State.MULTY);
         launcher.dispose();
     }

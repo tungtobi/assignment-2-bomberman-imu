@@ -201,7 +201,6 @@ public class Game extends Canvas {
 	
 	public void pause() {
 		_paused = true;
-        System.out.println(_paused);
 	}
 
 	public void stop()

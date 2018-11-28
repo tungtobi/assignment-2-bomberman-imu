@@ -4,6 +4,7 @@ package uet.oop.bomberman.entities.character.enemy;
 import uet.oop.bomberman.Board;
 import uet.oop.bomberman.Game;
 import uet.oop.bomberman.entities.Entity;
+import uet.oop.bomberman.entities.LayeredEntity;
 import uet.oop.bomberman.entities.character.enemy.ai.AIMedium;
 import uet.oop.bomberman.entities.character.movement.Direction;
 import uet.oop.bomberman.entities.tile.destroyable.Brick;
@@ -12,11 +13,11 @@ import uet.oop.bomberman.graphics.Sprite;
 public class Doria extends Enemy {
 
 	public Doria(int x, int y, Board board) {
-		super(x, y, board, Sprite.kondoria_dead, Game.getEnemySpeed(), 200);
+		super(x, y, board, Sprite.kondoria_dead, Game.getEnemySpeed() / 3, 200);
 		
 		_sprite = Sprite.kondoria_left1;
 		
-		_ai = new AIMedium(_board.getBomber(), this);
+		_ai = new AIMedium(_board, _board.getBomber(), this);
 		_direction  = _ai.calculateDirection();
 	}
 
@@ -25,7 +26,10 @@ public class Doria extends Enemy {
         double xa = 0;
         double ya = 0;
 
-        _direction = _ai.calculateDirection();
+        Direction dir = _ai.calculateDirection();
+        if (dir != Direction.NONE) {
+            _direction = dir;
+        }
 
         if (_direction == Direction.UP)
             ya -= _speed;
@@ -47,7 +51,7 @@ public class Doria extends Enemy {
 
     @Override
     public boolean collide(Entity e) {
-        if (e instanceof Brick)
+        if (e instanceof LayeredEntity)
             return true;
 
         return super.collide(e);

@@ -60,23 +60,23 @@ public abstract class Enemy extends Character {
 			return;
 		}
 		
-		if(_alive)
+		if(_alive) {
 			calculateMove();
+		}
 	}
 	
 	@Override
 	public void render(Screen screen) {
 		
-		if(_alive)
-			chooseSprite();
-		else {
+		if(_alive) {
+		    chooseSprite();
+		} else {
 			if(_timeAfter > 0) {
 				_sprite = _deadSprite;
 				_animate = 0;
 			} else {
 				_sprite = Sprite.movingSprite(Sprite.mob_dead1, Sprite.mob_dead2, Sprite.mob_dead3, _animate, 60);
 			}
-				
 		}
 			
 		screen.renderEntity((int)_x, (int)_y - _sprite.SIZE, this);

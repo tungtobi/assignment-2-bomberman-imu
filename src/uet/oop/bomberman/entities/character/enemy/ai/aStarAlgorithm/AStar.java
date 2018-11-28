@@ -6,229 +6,295 @@ import uet.oop.bomberman.entities.bomb.Bomb;
 import uet.oop.bomberman.entities.character.Bomber;
 import uet.oop.bomberman.entities.character.enemy.Enemy;
 import uet.oop.bomberman.entities.character.movement.Direction;
+import uet.oop.bomberman.entities.character.movement.DirectionConverter;
+import uet.oop.bomberman.entities.tile.Tile;
 import uet.oop.bomberman.entities.tile.Wall;
 import uet.oop.bomberman.entities.tile.destroyable.Brick;
+import uet.oop.bomberman.level.Coordinates;
 
+import java.util.ArrayList;
 import java.util.Map;
 import java.util.PriorityQueue;
+import java.util.Random;
 
 public class AStar {
-    public static final int DIAGONAL_COST = 14;
-    public static final int V_H_COST = 10;
+    private ArrayList<Node> closed = new ArrayList<Node>();
+    private PriorityQueue<Node> open = new PriorityQueue<Node>();
+    private TileMap map;
+    private int maxSearchDistance = 100;
 
-    public class Cell {
-        int heuristicCost;
-        int finalCost;
+    private Node[][] nodes;
+    private AStarHeuristic heuristic;
+    private Node current;
 
-        int i, j;
+    private Enemy enemy;
+    private int sourceX, sourceY;
+    private int distance;
 
-        public Cell(int _i, int _j) {
-            i = _i;
-            j = _j;
-        }
+    public AStar(TileMap map) {
+        heuristic = new AStarHeuristic();
+        this.map = map;
 
-        @Override
-        public String toString() {
-            return "(" + i + ", " + j + ")";
-        }
-
-        Cell parent;
-    }
-
-    private Board board;
-    private Cell[][] grid;
-
-    private PriorityQueue<Cell> open;
-
-    private boolean[][] closed;
-
-    private Enemy dest;
-    private Bomber targ;
-
-    private int destI, destJ, targI, targJ;
-
-    public AStar(Board _board, Enemy enemy, Bomber bomber) {
-        board = _board;
-
-        open = new PriorityQueue<>((Object o1, Object o2) -> {
-            Cell c1 = (Cell) o1;
-            Cell c2 = (Cell) o2;
-
-            if (c1.finalCost < c2.finalCost) return -1;
-            else if (c1.finalCost > c2.finalCost) return 1;
-            else return 0;
-        });
-
-        dest = enemy;
-        destI = dest.getYTile();
-        destJ = dest.getXTile();
-
-        targ = bomber;
-        targI = targ.getYTile();
-        targJ = targ.getXTile();
-
-        int col = board.getWidth();
-        int row = board.getHeight();
-
-        System.out.println(row + " " + col);
-
-        loadMap(row, col);
-
-        closed = new boolean[row][col];
-    }
-
-    public void loadMap(int row, int col) {
-        grid = new Cell[row][col];
-
-        for (int i = 0; i < row; i++) {
-            for (int j = 0; j < col; j++) {
-
-                boolean isBlocked = board.blockedAt(j, i);
-
-                if (isBlocked) {
-                    grid[i][j] = null;
-//                    System.out.print("X");
-                } else {
-                    grid[i][j] = new Cell(i, j);
-                    grid[i][j].heuristicCost = Math.abs(i - targI) + Math.abs(j - targJ);
-//                    System.out.print(" ");
-                }
+        nodes = new Node[map.getHeight()][map.getWidth()];
+        for (int y = 0; y < map.getHeight(); y++) {
+            for (int x = 0; x < map.getWidth(); x++) {
+                nodes[y][x] = new Node(x, y);
             }
-
-//            System.out.println();
-        }
-
-        grid[destI][destJ].finalCost = 0;
-    }
-
-    public void updateTarget(Bomber bomber) {
-        targI = bomber.getYTile();
-        targJ = bomber.getXTile();
-
-//        int col = board.getWidth();
-//        int row = board.getHeight();
-//
-//        display(row, col);
-    }
-
-    public void display(int row, int col) {
-        for (int i = 0; i < row; i++) {
-            for (int j = 0; j < col; j++) {
-                if (grid[i][j] != null)
-                    System.out.print(" ");
-                else System.out.print("x");
-            }
-            System.out.println();
         }
     }
 
-    private void checkAndUpdateCost(Cell current, Cell t, int cost) {
-        if (t == null || closed[t.i][t.j]) return;
-        int tFinalCost = t.heuristicCost + cost;
+    public Direction findPath(Enemy enemy, int sx, int sy, int tx, int ty) {
+        current = null;
 
-        boolean inOpen = open.contains(t);
-        if (!inOpen || tFinalCost < t.finalCost) {
-            t.finalCost = tFinalCost;
-            t.parent = current;
+        this.enemy = enemy;
+        this.sourceX = tx;
+        this.sourceY = ty;
+        this.distance = 0;
 
-            if (!inOpen) open.add(t);
-        }
-    }
+        map.update();
 
-    public Direction calculateDirection() {
-        findPath();
-
-        if (closed[targI][targJ]) {
-
-            Cell current = grid[targI][targJ];
-
-            if (current != null) {
-                while (current.parent != null) {
-                    System.out.print(current + " -> ");
-                    current = current.parent;
-                }
-
-                Direction direct = calculateNextMove(current, destI, destJ);
-                return direct;
-            } else return Direction.NONE;
-
-        } else {
-            System.out.println("No possible path");
+        if (map.blocked(tx, ty)) {
             return Direction.NONE;
         }
 
+        for (int y = 0; y < map.getHeight(); y++) {
+            for (int x = 0; x < map.getWidth(); x++) {
+                nodes[y][x].reset();
+            }
+        }
 
+        nodes[sy][sx].cost = 0;
+        nodes[sy][sx].depth = 0;
+        closed.clear();
+        open.clear();
+        addToOpen(nodes[sy][sx]);
+
+        nodes[ty][tx].parent = null;
+
+        int maxDepth = 0;
+        while (maxDepth < maxSearchDistance && open.size() != 0) {
+            int lx = sx;
+            int ly = sy;
+            if (current != null) {
+                lx = current.x;
+                ly = current.y;
+            }
+
+            current = getFirstInOpen();
+            distance = current.depth;
+
+            if (current == nodes[ty][tx]) {
+                if (isValidLocation(enemy, lx, ly, tx, ty)) {
+                    break;
+                }
+            }
+
+            removeFromOpen(current);
+            addToClosed(current);
+
+            for (int x = -1; x < 2; x++) {
+                for (int y = -1; y < 2; y++) {
+                    if (x == 0 && y == 0) {
+                        continue;
+                    }
+
+                    if (x != 0 && y != 0) {
+                        continue;
+                    }
+
+                    int xp = x + current.x;
+                    int yp = y + current.y;
+
+                    if (isValidLocation(enemy, current.x, current.y, xp, yp)) {
+                        float nextStepCost = current.cost + 1;
+                        Node neighbour = nodes[yp][xp];
+
+                        if (nextStepCost < neighbour.cost) {
+                            if (inOpenList(neighbour)) {
+                                removeFromOpen(neighbour);
+                            }
+                            if (inClosedList(neighbour)) {
+                                removeFromClosed(neighbour);
+                            }
+                        }
+
+                        if (!inOpenList(neighbour) && !inClosedList(neighbour)) {
+                            neighbour.cost = nextStepCost;
+                            neighbour.heuristic = heuristic.getCost(map, xp, yp, tx, ty);
+                            maxDepth = Math.max(maxDepth, neighbour.setParent(current));
+                            addToOpen(neighbour);
+                        }
+                    }
+                }
+            }
+        }
+
+        if (nodes[ty][tx].parent == null) {
+            return Direction.NONE;
+        }
+
+        Node target = nodes[ty][tx];
+        while (target.parent != nodes[sy][sx]) {
+            target = target.parent;
+        }
+
+        return calculateDirection(target.x, target.y);
     }
 
+    private Direction calculateDirection(int targX, int targY) {
+        double tx = Coordinates.tileToPixel(targX);
+        double ty = Coordinates.tileToPixel(targY + 1);
+        double sx = enemy.getX();
+        double sy = enemy.getY();
 
-    private Direction calculateNextMove(Cell cur, int dstI, int dstJ) {
-        if(cur.j < dstJ)
+        int vertical = (new Random()).nextInt(2);
+        Direction dir;
+
+        switch (vertical) {
+            case 1:
+                dir = calculateRowDirection(ty);
+                if (dir == Direction.NONE)
+                    dir = calculateColDirection(tx);
+                break;
+            default:
+                dir = calculateColDirection(tx);
+                if (dir == Direction.NONE)
+                    dir = calculateRowDirection(ty);
+                break;
+        }
+
+        return dir;
+    }
+
+    private Direction calculateColDirection(double tx) {
+
+        if(tx < enemy.getX())
             return Direction.LEFT;
-        else if(cur.j > dstJ)
+        else if(tx > enemy.getX())
             return Direction.RIGHT;
 
-        if(cur.i < dstI)
+        return Direction.NONE;
+    }
+
+    private Direction calculateRowDirection(double ty) {
+        if(ty < enemy.getY())
             return Direction.UP;
-        else if(cur.i > dstI)
+        else if(ty > enemy.getY())
             return Direction.DOWN;
 
         return Direction.NONE;
     }
 
-    public void findPath() {
-        open.add(grid[destI][destJ]);
+    private boolean isValidLocation(Enemy enemy, int sx, int sy, int x, int y) {
+        boolean invalid = x < 0 || y < 0 || x > map.getWidth() || y > map.getHeight();
 
-        Cell current;
+        if (!invalid && (sx != x || sy != y)) {
+            this.enemy = enemy;
+            this.sourceX = sx;
+            this.sourceY = sy;
+            invalid = map.blocked(x, y);
+        }
 
-        while (true) {
-            current = open.poll();
-            if (current == null) break;
-            closed[current.i][current.j] = true;
+        return !invalid;
+    }
 
-            if (current.equals(grid[targI][targJ]))
-                return;
+    private Node getFirstInOpen() {
+        return (Node) open.peek();
+    }
 
-            Cell t;
+    private boolean inOpenList(Node node) {
+        return node.isOpen();
+    }
 
-            if (current.i - 1 >= 0) {
-                t = grid[current.i - 1][current.j];
-                checkAndUpdateCost(current, t, current.finalCost + V_H_COST);
+    private void addToOpen(Node node) {
+        node.setOpen(true);
+        open.add(node);
+    }
 
-                if (current.j - 1 > 0) {
-                    t = grid[current.i - 1][current.j - 1];
-                    checkAndUpdateCost(current, t, current.finalCost + DIAGONAL_COST);
-                }
+    private void removeFromOpen(Node node) {
+        node.setOpen(false);
+        open.remove(node);
+    }
 
-                if (current.j + 1 < grid[0].length) {
-                    t = grid[current.i - 1][current.j + 1];
-                    checkAndUpdateCost(current, t, current.finalCost + DIAGONAL_COST);
-                }
+    private void addToClosed(Node node) {
+        node.setClosed(true);
+        closed.add(node);
+    }
+
+    private boolean inClosedList(Node node) {
+        return node.isClosed();
+    }
+
+    private void removeFromClosed(Node node) {
+        node.setClosed(false);
+        closed.remove(node);
+    }
+
+    private class Node implements Comparable {
+        private int x, y;
+        private float cost;
+        private Node parent;
+        private float heuristic;
+        private int depth;
+        private boolean open;
+        private boolean closed;
+
+        public Node(int x, int y) {
+            this.x = x;
+            this.y = y;
+        }
+
+        public int setParent(Node parent) {
+            depth = parent.depth + 1;
+            this.parent = parent;
+
+            return depth;
+        }
+
+        public int compareTo(Object other) {
+            if (!(other instanceof Node))
+                return -1;
+
+            Node o = (Node) other;
+
+            float f = heuristic + cost;
+            float of = o.heuristic + o.cost;
+
+            if (f < of) {
+                return -1;
+            } else if (f > of) {
+                return 1;
+            } else {
+                return 0;
             }
+        }
 
-            if (current.j - 1 >= 0) {
-                t = grid[current.i][current.j - 1];
-                checkAndUpdateCost(current, t, current.finalCost + V_H_COST);
-            }
+        public void setOpen(boolean open) {
+            this.open = open;
+        }
 
-            if (current.j+1<grid[0].length){
-                t = grid[current.i][current.j+1];
-                checkAndUpdateCost(current, t, current.finalCost+V_H_COST);
-            }
+        public boolean isOpen() {
+            return open;
+        }
 
-            if (current.i+1<grid.length){
-                t = grid[current.i+1][current.j];
-                checkAndUpdateCost(current, t, current.finalCost+V_H_COST);
+        public void setClosed(boolean closed) {
+            this.closed = closed;
+        }
 
-                if (current.j-1>=0){
-                    t = grid[current.i+1][current.j-1];
-                    checkAndUpdateCost(current, t, current.finalCost+DIAGONAL_COST);
-                }
+        public boolean isClosed() {
+            return closed;
+        }
 
-                if (current.j+1<grid[0].length){
-                    t = grid[current.i+1][current.j+1];
-                    checkAndUpdateCost(current, t, current.finalCost+DIAGONAL_COST);
-                }
-            }
+        public void reset() {
+            closed = false;
+            open = false;
+            cost = 0;
+            depth = 0;
+        }
+
+        @Override
+        public String toString() {
+            return "[Node " + x + ", " + y + "]";
         }
     }
 }

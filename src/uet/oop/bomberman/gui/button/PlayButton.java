@@ -12,6 +12,7 @@ public class PlayButton extends Button {
 
     @Override
     public void actionPerformed(ActionEvent e) {
+        onClickSound();
         launcher.getGame().changeState(BombermanGame.State.SINGlE);
         launcher.dispose();
     }

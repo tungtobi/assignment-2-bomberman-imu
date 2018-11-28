@@ -180,7 +180,7 @@ public class Bomber extends Character {
         else {
             if(_finalAnimation > 0) --_finalAnimation;
             else
-                _board.endGame();
+                _board.endGame(this);
         }
     }
 

@@ -10,44 +10,13 @@ import uet.oop.bomberman.entities.character.movement.Direction;
 import uet.oop.bomberman.entities.tile.destroyable.Brick;
 import uet.oop.bomberman.graphics.Sprite;
 
-public class Doria extends Enemy {
+public class Doria extends SmartEnemy {
 
 	public Doria(int x, int y, Board board) {
 		super(x, y, board, Sprite.kondoria_dead, Game.getEnemySpeed() / 3, 200);
 		
 		_sprite = Sprite.kondoria_left1;
-		
-		_ai = new AIMedium(_board, _board.getBomber(), this);
-		_direction  = _ai.calculateDirection();
 	}
-
-    @Override
-    public void calculateMove() {
-        double xa = 0;
-        double ya = 0;
-
-        Direction dir = _ai.calculateDirection();
-        if (dir != Direction.NONE) {
-            _direction = dir;
-        }
-
-        if (_direction == Direction.UP)
-            ya -= _speed;
-        else if (_direction == Direction.RIGHT)
-            xa += _speed;
-        else if (_direction == Direction.DOWN)
-            ya += _speed;
-        else if (_direction == Direction.LEFT)
-            xa -= _speed;
-
-        _moving = (xa != 0) || (ya != 0);
-
-        if (canMove(_x + xa, _y + ya)) {
-            move(xa, ya);
-        } else {
-            _direction = _ai.randomDirection();
-        }
-    }
 
     @Override
     public boolean collide(Entity e) {

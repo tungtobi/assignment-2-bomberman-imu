@@ -7,15 +7,12 @@ import uet.oop.bomberman.entities.character.enemy.ai.AIMedium;
 import uet.oop.bomberman.entities.character.movement.Direction;
 import uet.oop.bomberman.graphics.Sprite;
 
-public class Pass extends Enemy {
+public class Pass extends SmartEnemy {
 
 	public Pass(int x, int y, Board board) {
 		super(x, y, board, Sprite.pass_dead, Game.getEnemySpeed(), 200);
 		
 		_sprite = Sprite.pass_left1;
-		
-		_ai = new AIMedium(_board, _board.getBomber(), this);
-		_direction  = _ai.calculateDirection();
 	}
 
 

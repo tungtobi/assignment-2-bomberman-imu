@@ -1,9 +1,13 @@
 package uet.oop.bomberman.graphics;
 
 import uet.oop.bomberman.Board;
+import uet.oop.bomberman.BombermanGame;
 import uet.oop.bomberman.Game;
 import uet.oop.bomberman.entities.Entity;
+import uet.oop.bomberman.entities.bomb.Bomb;
+import uet.oop.bomberman.entities.character.BlueBomber;
 import uet.oop.bomberman.entities.character.Bomber;
+import uet.oop.bomberman.gui.MyFont;
 
 import java.awt.*;
 
@@ -16,13 +20,20 @@ public class Screen {
 	private int _transparentColor = 0xffff00ff;
 	
 	public static int xOffset = 0, yOffset = 0;
-	
+
+	private int xTitle, yTitle, ySubtitle, ySubtitle2;
+
+
 	public Screen(int width, int height) {
 		_width = width;
 		_height = height;
 		
 		_pixels = new int[width * height];
-		
+
+		xTitle = getRealWidth();
+		yTitle = getRealHeight() - (Game.TILES_SIZE * 2) * Game.SCALE;
+		ySubtitle = getRealHeight() + (Game.TILES_SIZE * 2) * Game.SCALE;
+		ySubtitle2 = getRealHeight() + (Game.TILES_SIZE * 2) * Game.SCALE * 2;
 	}
 	
 	public void clear() {
@@ -85,37 +96,57 @@ public class Screen {
 		return temp;
 	}
 	
-	public void drawEndGame(Graphics g, int points) {
+	public void drawEndGame(Graphics g, int points, BombermanGame.State mode, Bomber player) {
 		g.setColor(Color.black);
 		g.fillRect(0, 0, getRealWidth(), getRealHeight());
 		
-		Font font = new Font("Arial", Font.PLAIN, 20 * Game.SCALE);
-		g.setFont(font);
+		g.setFont(MyFont.TITLE);
 		g.setColor(Color.white);
-		drawCenteredString("GAME OVER", getRealWidth(), getRealHeight(), g);
+		drawCenteredString("GAME OVER", xTitle, yTitle, g);
 		
-		font = new Font("Arial", Font.PLAIN, 10 * Game.SCALE);
-		g.setFont(font);
-		g.setColor(Color.yellow);
-		drawCenteredString("POINTS: " + points, getRealWidth(), getRealHeight() + (Game.TILES_SIZE * 2) * Game.SCALE, g);
+		g.setFont(MyFont.SUBTITLE);
+
+		String subtitle = "SCORES: " + points;
+
+		if (mode == BombermanGame.State.MULTY) {
+		    if (player instanceof BlueBomber) {
+		        subtitle = "GREEN PLAYER WIN";
+                g.setColor(Color.green);
+            } else {
+		        subtitle = "BLUE PLAYER WIN";
+                g.setColor(Color.cyan);
+            }
+        } else {
+            g.setColor(Color.cyan);
+            String subtitle2 = "HIGHSCORES: " + Game.highscore;
+            drawCenteredString(subtitle2, xTitle, ySubtitle2, g);
+            g.setColor(Color.yellow);
+        }
+
+		drawCenteredString(subtitle, xTitle, ySubtitle, g);
 	}
 
 	public void drawChangeLevel(Graphics g, int level) {
 		g.setColor(Color.black);
 		g.fillRect(0, 0, getRealWidth(), getRealHeight());
 		
-		Font font = new Font("Arial", Font.PLAIN, 20 * Game.SCALE);
-		g.setFont(font);
+		g.setFont(MyFont.TITLE);
 		g.setColor(Color.white);
-		drawCenteredString("LEVEL " + level, getRealWidth(), getRealHeight(), g);
+
+		String title = "LEVEL " + level;
+
+		// Chế độ 2 người chơi
+		if (level == 0)
+		    title = "MULTY PLAYER";
+
+        drawCenteredString(title, xTitle, yTitle, g);
 		
 	}
 	
 	public void drawPaused(Graphics g) {
-		Font font = new Font("Arial", Font.PLAIN, 20 * Game.SCALE);
-		g.setFont(font);
+		g.setFont(MyFont.TITLE);
 		g.setColor(Color.white);
-		drawCenteredString("PAUSED", getRealWidth(), getRealHeight(), g);
+		drawCenteredString("PAUSED", xTitle, yTitle, g);
 		
 	}
 

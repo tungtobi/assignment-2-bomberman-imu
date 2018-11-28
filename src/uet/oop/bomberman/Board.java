@@ -40,6 +40,8 @@ public class Board implements IRender {
 	public List<Character> _characters = new ArrayList<>();
 	public List<Bomb> _bombs = new ArrayList<>();
 	private List<Message> _messages = new ArrayList<>();
+
+	private Bomber loser;
 	
 	private int _screenToShow = -1; //1:endgame, 2:changelevel, 3:paused
 	
@@ -64,12 +66,6 @@ public class Board implements IRender {
 	
 	@Override
 	public void update() {
-		if( _game.isPaused() ) {
-            if (_input.space)
-                loadLevel(1);
-		    //return;
-        }
-
 		updateEntities();
 		updateCharacters();
 		updateBombs();
@@ -80,6 +76,7 @@ public class Board implements IRender {
 			Character a = _characters.get(i);
 			if(a.isRemoved()) _characters.remove(i);
 		}
+
 	}
 
 	@Override
@@ -137,27 +134,32 @@ public class Board implements IRender {
 			_entities = new Entity[_levelLoader.getHeight() * _levelLoader.getWidth()];
 			_levelLoader.createEntities();
 		} catch (LoadLevelException e) {
-			endGame();
+			endGame(null);
 		}
 	}
 	
 	protected void detectEndGame() {
 		if(_time <= 0)
-			endGame();
+			endGame(null);
 	}
 	
-	public void endGame() {
+	public void endGame(Bomber player) {
 		_screenToShow = 1;
+		loser = player;
 		musicPlayer.stop();
 		_game.resetScreenDelay();
 		_game.pause();
 
+		if (_points > _game.highscore
+                && _game.getMode() == BombermanGame.State.SINGlE) {
+		    _game.highscore = _points;
+        }
 	}
 	
 	public boolean detectNoEnemies() {
 		int total = 0;
 		for (int i = 0; i < _characters.size(); i++) {
-			if(_characters.get(i) instanceof Bomber == false)
+			if (!(_characters.get(i) instanceof Bomber))
 				++total;
 		}
 		
@@ -167,7 +169,7 @@ public class Board implements IRender {
 	public void drawScreen(Graphics g) {
 		switch (_screenToShow) {
 			case 1:
-				_screen.drawEndGame(g, _points);
+				_screen.drawEndGame(g, _points, getGame().getMode(), loser);
 				break;
 			case 2:
 				_screen.drawChangeLevel(g, _levelLoader.getLevel());
@@ -293,10 +295,6 @@ public class Board implements IRender {
 	}
 	
 	public Entity getEntityAt(double x, double y) {
-		// DEBUG
-		// System.out.println(x + " " + y);
-		// System.out.println((int)x + (int)y * _levelLoader.getWidth());
-		// END DEBUG 
 		return _entities[(int)x + (int)y * _levelLoader.getWidth()];
 	}
 	

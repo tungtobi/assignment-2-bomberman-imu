@@ -3,6 +3,7 @@ package uet.oop.bomberman;
 import uet.oop.bomberman.entities.character.Bomber;
 import uet.oop.bomberman.graphics.Screen;
 import uet.oop.bomberman.gui.Frame;
+import uet.oop.bomberman.input.FileDataManager;
 import uet.oop.bomberman.input.Keyboard;
 
 import java.awt.*;
@@ -31,6 +32,8 @@ public class Game extends Canvas {
 	
 	public static final int TIME = 200;
 	public static final int POINTS = 0;
+
+	public static int highscore = 0;
 	
 	protected static int SCREENDELAY = 3;
 
@@ -66,6 +69,8 @@ public class Game extends Canvas {
 
 		_board = new Board(this, _input, screen, _mode);
 		addKeyListener(_input);
+
+		loadHighscore();
 	}
 
 	private void renderGame() {
@@ -159,7 +164,7 @@ public class Game extends Canvas {
 					stop();
 				if (!_frame.isDisplayable())
 				{
-					_board.endGame();
+					_board.endGame(null);
 					stop();
 				}
 
@@ -168,6 +173,11 @@ public class Game extends Canvas {
 			}
 		}
 	}
+
+    private void loadHighscore() {
+        FileDataManager loader = new FileDataManager();
+        highscore = loader.loadHighscore();
+    }
 	
     public void saveBomberData(Bomber bomber) {
 	    _bombRate = bomber.getBombRate();

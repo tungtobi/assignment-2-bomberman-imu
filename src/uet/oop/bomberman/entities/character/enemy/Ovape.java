@@ -7,15 +7,12 @@ import uet.oop.bomberman.entities.character.enemy.ai.AIMedium;
 import uet.oop.bomberman.entities.character.movement.Direction;
 import uet.oop.bomberman.graphics.Sprite;
 
-public class Ovape extends Enemy {
+public class Ovape extends SmartEnemy {
 
 	public Ovape(int x, int y, Board board) {
 		super(x, y, board, Sprite.ovape_dead, Game.getEnemySpeed(), 200);
 		
 		_sprite = Sprite.ovape_left1;
-		
-		_ai = new AIMedium(_board, _board.getBomber(), this);
-		_direction  = _ai.calculateDirection();
 	}
 
     @Override

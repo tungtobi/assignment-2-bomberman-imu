@@ -7,7 +7,7 @@ import java.awt.event.ActionEvent;
 
 public class MultiPlayButton extends Button {
     public MultiPlayButton(Launcher game) {
-        super(game, "Multi Play");
+        super(game, "Fight Mode");
     }
 
     @Override

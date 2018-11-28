@@ -1,24 +1,24 @@
 package uet.oop.bomberman.entities.character.enemy.ai;
 
 import uet.oop.bomberman.Board;
-import uet.oop.bomberman.Game;
 import uet.oop.bomberman.entities.character.Bomber;
 import uet.oop.bomberman.entities.character.enemy.Enemy;
-import uet.oop.bomberman.entities.character.enemy.ai.aStarAlgorithm.AStar;
+import uet.oop.bomberman.entities.character.enemy.ai.aStarAlgorithm.AStarPathFinder;
 import uet.oop.bomberman.entities.character.enemy.ai.aStarAlgorithm.TileMap;
 import uet.oop.bomberman.entities.character.movement.Direction;
-import uet.oop.bomberman.entities.tile.Tile;
 
 public class AIMedium extends AI {
 	Bomber _bomber;
-	AStar aStar;
-	TileMap map;
+	AStarPathFinder _pathFinder;
+	TileMap _map;
+	Board _board;
 
 	public AIMedium(Board board, Bomber bomber, Enemy e) {
 		super(e);
 	    _bomber = bomber;
-	    map = new TileMap(board, e);
-	    aStar = new AStar(map);
+	    _board = board;
+	    _map = new TileMap(board, e);
+	    _pathFinder = new AStarPathFinder(_map);
 	}
 
 	@Override
@@ -26,10 +26,17 @@ public class AIMedium extends AI {
 		// TODO: cài đặt thuật toán tìm đường đi
         int sx = _e.getXTile();
         int sy = _e.getYTile();
-        int tx = _bomber.getXTile();
-        int ty = _bomber.getYTile();
+        int tx = sx, ty = sy;
 
-        Direction direction = aStar.findPath(_e, sx, sy, tx, ty);
+        try {
+            tx = _bomber.getXTile();
+            ty = _bomber.getYTile();
+        } catch (NullPointerException e) {
+            _bomber = _board.getBomber();
+            System.err.println("Null player");
+        }
+
+        Direction direction = _pathFinder.findPath(_e, sx, sy, tx, ty);
 
         return direction;
 	}

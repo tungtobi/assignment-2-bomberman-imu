@@ -28,6 +28,7 @@ x - Portal
 
 Character:
 p - Bomber
+z - Blue Bomber
 1 - Balloon
 2 - Oneal
 3 - Dall

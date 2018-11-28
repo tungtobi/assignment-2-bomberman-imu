@@ -157,7 +157,7 @@ public class Launcher extends JFrame
         createGuideDescription();
 
         infoPanel.add(new BackButton(this),
-                new AbsoluteConstraints(200, 330, Button.WIDTH, Button.HEIGHT));
+                new AbsoluteConstraints(200, 390, Button.WIDTH, Button.HEIGHT));
 
         infoPanel.setVisible(false);
 
@@ -165,17 +165,23 @@ public class Launcher extends JFrame
     }
 
     private void createGuideDescription() {
-        JLabel movement = new JLabel();
-        movement.setFont(MyFont.SMALL); // NOI18N
-        movement.setForeground(MyColor.WHITE);
-        movement.setText("Use Space to place bomb");
-        infoPanel.add(movement, new AbsoluteConstraints(180, 240, 240, 60));
+        JLabel text3 = new JLabel();
+        text3.setFont(MyFont.SMALL); // NOI18N
+        text3.setForeground(MyColor.WHITE);
+        text3.setText("Use Space or J key to place bomb.");
+        infoPanel.add(text3, new AbsoluteConstraints(60, 300, 470, 60));
 
-        JLabel placeBomb = new JLabel();
-        placeBomb.setFont(MyFont.SMALL); // NOI18N
-        placeBomb.setForeground(MyColor.WHITE);
-        placeBomb.setText("Use W, A, S, D or Left, Right, Up, Down Arrows to move");
-        infoPanel.add(placeBomb, new AbsoluteConstraints(60, 180, 470, 60));
+        JLabel text2 = new JLabel();
+        text2.setFont(MyFont.SMALL); // NOI18N
+        text2.setForeground(MyColor.WHITE);
+        text2.setText("Left, Right, Up, Down Arrows to move;");
+        infoPanel.add(text2, new AbsoluteConstraints(60, 240, 470, 60));
+
+        JLabel text1 = new JLabel();
+        text1.setFont(MyFont.SMALL); // NOI18N
+        text1.setForeground(MyColor.WHITE);
+        text1.setText("Use W, A, S, D key or");
+        infoPanel.add(text1, new AbsoluteConstraints(60, 180, 470, 60));
     }
 
     private void createWindow() {

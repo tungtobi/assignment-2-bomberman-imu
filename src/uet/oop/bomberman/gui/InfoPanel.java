@@ -20,10 +20,12 @@ public class InfoPanel extends JPanel {
 		setLayout(new GridLayout());
 
 		timeLabel = new JLabel("Time: " + game.getBoard().getTime());
+		timeLabel.setFont(MyFont.TINY);
 		timeLabel.setForeground(Color.white);
 		timeLabel.setHorizontalAlignment(JLabel.CENTER);
 
 		pointsLabel = new JLabel("Score: " + game.getBoard().getPoints());
+		pointsLabel.setFont(MyFont.TINY);
 		pointsLabel.setForeground(Color.white);
 		pointsLabel.setHorizontalAlignment(JLabel.CENTER);
 

@@ -1,27 +1,18 @@
 package uet.oop.bomberman.entities.character.enemy.ai.aStarAlgorithm;
 
-import uet.oop.bomberman.Board;
-import uet.oop.bomberman.entities.Entity;
-import uet.oop.bomberman.entities.bomb.Bomb;
-import uet.oop.bomberman.entities.character.Bomber;
 import uet.oop.bomberman.entities.character.enemy.Enemy;
 import uet.oop.bomberman.entities.character.movement.Direction;
-import uet.oop.bomberman.entities.character.movement.DirectionConverter;
-import uet.oop.bomberman.entities.tile.Tile;
-import uet.oop.bomberman.entities.tile.Wall;
-import uet.oop.bomberman.entities.tile.destroyable.Brick;
 import uet.oop.bomberman.level.Coordinates;
 
 import java.util.ArrayList;
-import java.util.Map;
 import java.util.PriorityQueue;
 import java.util.Random;
 
-public class AStar {
+public class AStarPathFinder {
     private ArrayList<Node> closed = new ArrayList<Node>();
     private PriorityQueue<Node> open = new PriorityQueue<Node>();
     private TileMap map;
-    private int maxSearchDistance = 100;
+    private int maxSearchDistance = 8;
 
     private Node[][] nodes;
     private AStarHeuristic heuristic;
@@ -31,10 +22,11 @@ public class AStar {
     private int sourceX, sourceY;
     private int distance;
 
-    public AStar(TileMap map) {
+    public AStarPathFinder(TileMap map) {
         heuristic = new AStarHeuristic();
         this.map = map;
 
+        // Thiết lập tập các node từ bản đồ Tile map
         nodes = new Node[map.getHeight()][map.getWidth()];
         for (int y = 0; y < map.getHeight(); y++) {
             for (int x = 0; x < map.getWidth(); x++) {
@@ -43,6 +35,15 @@ public class AStar {
         }
     }
 
+    /**
+     * Tính toán hướng đi cho đối tượng
+     * @param enemy con quái áp dụng thuật tìm đường A*
+     * @param sx hoành độ điểm xuất phát
+     * @param sy tung độ điểm xuất phát
+     * @param tx hoành độ điểm tới
+     * @param ty tung độ điểm tới
+     * @return hướng di chuyển cho quái
+     */
     public Direction findPath(Enemy enemy, int sx, int sy, int tx, int ty) {
         current = null;
 
@@ -53,18 +54,22 @@ public class AStar {
 
         map.update();
 
+        // Điểm cần tới bị chặn
         if (map.blocked(tx, ty)) {
             return Direction.NONE;
         }
 
+        // Thiết lập lại các thông số cho các nodes
         for (int y = 0; y < map.getHeight(); y++) {
             for (int x = 0; x < map.getWidth(); x++) {
                 nodes[y][x].reset();
             }
         }
 
+        // chi phí đi tại chỗ tất nhiên bằng 0
         nodes[sy][sx].cost = 0;
         nodes[sy][sx].depth = 0;
+
         closed.clear();
         open.clear();
         addToOpen(nodes[sy][sx]);
@@ -120,7 +125,7 @@ public class AStar {
 
                         if (!inOpenList(neighbour) && !inClosedList(neighbour)) {
                             neighbour.cost = nextStepCost;
-                            neighbour.heuristic = heuristic.getCost(map, xp, yp, tx, ty);
+                            neighbour.heuristic = heuristic.getCost(xp, yp, tx, ty);
                             maxDepth = Math.max(maxDepth, neighbour.setParent(current));
                             addToOpen(neighbour);
                         }
@@ -141,6 +146,12 @@ public class AStar {
         return calculateDirection(target.x, target.y);
     }
 
+    /**
+     * Tính toán hướng đi sau khi biết tọa độ cần đến
+     * @param targX hoành độ điểm đến
+     * @param targY tung độ điểm đến
+     * @return hướng di chuyển cần thiết
+     */
     private Direction calculateDirection(int targX, int targY) {
         double tx = Coordinates.tileToPixel(targX);
         double ty = Coordinates.tileToPixel(targY + 1);
@@ -166,8 +177,12 @@ public class AStar {
         return dir;
     }
 
+    /**
+     * Hướng để di chuyển ngang
+     * @param tx hoành độ điểm tới
+     * @return hướng theo chiều ngang
+     */
     private Direction calculateColDirection(double tx) {
-
         if(tx < enemy.getX())
             return Direction.LEFT;
         else if(tx > enemy.getX())
@@ -176,6 +191,11 @@ public class AStar {
         return Direction.NONE;
     }
 
+    /**
+     * Hướng để di chuyển dọc
+     * @param ty tung độ điểm tới
+     * @return hướng theo chiều dọc
+     */
     private Direction calculateRowDirection(double ty) {
         if(ty < enemy.getY())
             return Direction.UP;
@@ -185,6 +205,15 @@ public class AStar {
         return Direction.NONE;
     }
 
+    /**
+     * Kiểm tra địa điểm có xác định không?
+     * @param enemy con quái
+     * @param sx
+     * @param sy
+     * @param x
+     * @param y
+     * @return
+     */
     private boolean isValidLocation(Enemy enemy, int sx, int sy, int x, int y) {
         boolean invalid = x < 0 || y < 0 || x > map.getWidth() || y > map.getHeight();
 

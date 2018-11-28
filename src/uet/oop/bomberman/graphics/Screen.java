@@ -106,7 +106,7 @@ public class Screen {
 		
 		g.setFont(MyFont.SUBTITLE);
 
-		String subtitle = "SCORES: " + points;
+		String subtitle = "Scores: " + points;
 
 		if (mode == BombermanGame.State.MULTY) {
 		    if (player instanceof BlueBomber) {
@@ -118,7 +118,7 @@ public class Screen {
             }
         } else {
             g.setColor(Color.cyan);
-            String subtitle2 = "HIGHSCORES: " + Game.highscore;
+            String subtitle2 = "Highscores: " + Game.highscore;
             drawCenteredString(subtitle2, xTitle, ySubtitle2, g);
             g.setColor(Color.yellow);
         }

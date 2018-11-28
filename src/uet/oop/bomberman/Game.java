@@ -34,6 +34,7 @@ public class Game extends Canvas {
 	public static final int POINTS = 0;
 
 	public static int highscore = 0;
+	public static int maxLevel = 1;
 	
 	protected static int SCREENDELAY = 3;
 
@@ -70,7 +71,7 @@ public class Game extends Canvas {
 		_board = new Board(this, _input, screen, _mode);
 		addKeyListener(_input);
 
-		loadHighscore();
+		loadData();
 	}
 
 	private void renderGame() {
@@ -174,9 +175,9 @@ public class Game extends Canvas {
 		}
 	}
 
-    private void loadHighscore() {
+    private void loadData() {
         FileDataManager loader = new FileDataManager();
-        highscore = loader.loadHighscore();
+        loader.loadData();
     }
 	
     public void saveBomberData(Bomber bomber) {

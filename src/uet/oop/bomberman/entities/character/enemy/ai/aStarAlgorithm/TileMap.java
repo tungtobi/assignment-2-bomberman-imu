@@ -1,12 +1,7 @@
 package uet.oop.bomberman.entities.character.enemy.ai.aStarAlgorithm;
 
 import uet.oop.bomberman.Board;
-import uet.oop.bomberman.entities.Entity;
-import uet.oop.bomberman.entities.LayeredEntity;
 import uet.oop.bomberman.entities.character.Character;
-import uet.oop.bomberman.entities.tile.Grass;
-import uet.oop.bomberman.entities.tile.Wall;
-import uet.oop.bomberman.entities.tile.destroyable.Brick;
 
 public class TileMap {
     private Board board;
@@ -22,9 +17,13 @@ public class TileMap {
         character = charact;
     }
 
+    /**
+     * Cập nhật lại bản đồ từ board game
+     */
     public void update() {
         for (int y = 0; y < height; y++) {
             for (int x = 0; x < width; x++) {
+                // bị chặn tại (x, y)
                 if (board.blockedAt(character, x, y)) {
                     map[y][x] = 'x';
                 } else {
@@ -34,6 +33,9 @@ public class TileMap {
         }
     }
 
+    /**
+     * Hiển thị bản đồ
+     */
     private void display() {
         for (int y = 0; y < height; y++) {
             for (int x = 0; x < width; x++) {
@@ -43,14 +45,28 @@ public class TileMap {
         }
     }
 
+    /**
+     * Kiểm tra điểm (x, y) có bị chặn không
+     * @param x hoành độ điểm xét
+     * @param y tung độ điểm xét
+     * @return true nếu bị chặn và false nếu ngược lại
+     */
     public boolean blocked(int x, int y) {
         return map[y][x] == 'x';
     }
 
+    /**
+     * Lấy chiều dài bản đồ
+     * @return chiều dài bản đồ
+     */
     public int getWidth() {
         return width;
     }
 
+    /**
+     * Lấy chiều rộng bản đồ
+     * @return chiều rộng bản đồ
+     */
     public int getHeight() {
         return height;
     }

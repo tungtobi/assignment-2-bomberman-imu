@@ -15,6 +15,7 @@ import uet.oop.bomberman.entities.tile.destroyable.Brick;
 import uet.oop.bomberman.exceptions.LoadLevelException;
 import uet.oop.bomberman.graphics.IRender;
 import uet.oop.bomberman.graphics.Screen;
+import uet.oop.bomberman.gui.MyFont;
 import uet.oop.bomberman.input.Keyboard;
 import uet.oop.bomberman.level.Coordinates;
 import uet.oop.bomberman.level.FileLevelLoader;
@@ -55,7 +56,7 @@ public class Board implements IRender {
 
 		switch (mode) {
             case SINGlE:
-                loadLevel(1); // start in level 1
+                loadLevel(Game.maxLevel); // start in level 1
                 break;
             case MULTY:
                 loadLevel(0); // multy player mode
@@ -116,7 +117,11 @@ public class Board implements IRender {
 	}
 	
 	public void nextLevel() {
-		loadLevel(_levelLoader.getLevel() + 1);
+		int nextLv = _levelLoader.getLevel() + 1;
+		if (nextLv > Game.maxLevel) {
+		    Game.maxLevel = nextLv;
+        }
+		loadLevel(nextLv);
 	}
 	
 	public void loadLevel(int level) {
@@ -333,7 +338,7 @@ public class Board implements IRender {
 		for (int i = 0; i < _messages.size(); i++) {
 			m = _messages.get(i);
 			
-			g.setFont(new Font("Arial", Font.PLAIN, m.getSize()));
+			g.setFont(MyFont.TINY);
 			g.setColor(m.getColor());
 			g.drawString(m.getMessage(), (int)m.getX() - Screen.xOffset  * Game.SCALE, (int)m.getY());
 		}

@@ -112,10 +112,13 @@ public class Screen {
 		    if (player instanceof BlueBomber) {
 		        subtitle = "GREEN PLAYER WIN";
                 g.setColor(Color.green);
-            } else {
+            } else if (player != null){
 		        subtitle = "BLUE PLAYER WIN";
                 g.setColor(Color.cyan);
-            }
+            } else {
+                subtitle = "TIME OUT!";
+                g.setColor(Color.yellow);
+			}
         } else {
             g.setColor(Color.cyan);
             String subtitle2 = "Highscores: " + Game.highscore;
@@ -136,8 +139,9 @@ public class Screen {
 		String title = "LEVEL " + level;
 
 		// Chế độ 2 người chơi
-		if (level == 0)
+		if (level == 0) {
 		    title = "MULTY PLAYER";
+        }
 
         drawCenteredString(title, xTitle, yTitle, g);
 		

@@ -75,7 +75,7 @@ public class MyAudioPlayer implements Runnable {
     }
 
     public void play(){
-        clip.setFramePosition(0);  // Must always rewind!
+        clip.setFramePosition(0);  // Chạy từ đầu
         clip.start();
     }
     public void loop(){

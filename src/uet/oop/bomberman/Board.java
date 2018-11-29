@@ -78,6 +78,10 @@ public class Board implements IRender {
 			if(a.isRemoved()) _characters.remove(i);
 		}
 
+		if (_input.pause) {
+		    _screenToShow = 3;
+		    _game.pause();
+        }
 	}
 
 	@Override

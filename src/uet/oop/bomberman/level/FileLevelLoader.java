@@ -47,8 +47,7 @@ public class FileLevelLoader extends LevelLoader {
 		// TODO: đọc dữ liệu từ tệp cấu hình /levels/Level{level}.txt
 		// TODO: cập nhật các giá trị đọc được vào _width, _height, _level, _map
 		String path = "/levels/Level" + String.valueOf(level) + ".txt"; 
-		try
-		{
+		try {
 			InputStream in = getClass().getResourceAsStream(path);
 			Scanner scanner = new Scanner(in, "UTF-8");
 
@@ -59,8 +58,7 @@ public class FileLevelLoader extends LevelLoader {
 			_width  = Integer.parseInt(info[2]);
 
 			_map = new char[_height][_width]; 
-			for (int i = 0; i < _height; i++)
-			{
+			for (int i = 0; i < _height; i++) {
 				// TODO: check file format: throw an exception if line.hasNext() returns false
 				String line = scanner.nextLine();
 
@@ -69,23 +67,21 @@ public class FileLevelLoader extends LevelLoader {
 					_map[i][j] = line.charAt(j);
 				}
 			}
-		}
-		catch (NullPointerException e)
-		{
+		} catch (NullPointerException e) {
 			System.err.println(e);
 		}
 
 		// DEBUG
-		System.out.println("Test" + level);
-		System.out.println(_level + " " + _height + " " + _width);
-		for (int i = 0; i < _height; i++)
-		{
-			for (int j = 0; j < _width; j++)
-			{
-				System.out.print(_map[i][j]);
-			}
-			System.out.println();
-		}
+//		System.out.println("Test" + level);
+//		System.out.println(_level + " " + _height + " " + _width);
+//		for (int i = 0; i < _height; i++)
+//		{
+//			for (int j = 0; j < _width; j++)
+//			{
+//				System.out.print(_map[i][j]);
+//			}
+//			System.out.println();
+//		}
 		// END DEBUG
 	}
 

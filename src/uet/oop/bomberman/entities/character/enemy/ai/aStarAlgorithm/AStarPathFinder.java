@@ -208,11 +208,11 @@ public class AStarPathFinder {
     /**
      * Kiểm tra địa điểm có xác định không?
      * @param enemy con quái
-     * @param sx
-     * @param sy
-     * @param x
-     * @param y
-     * @return
+     * @param sx hoành độ điểm xuất phát
+     * @param sy tung độ điểm xuất phát
+     * @param x hoành độ điểm đích
+     * @param y tung độ điểm đích
+     * @return true nếu điểm đích xác định, false nếu ngược lại
      */
     private boolean isValidLocation(Enemy enemy, int sx, int sy, int x, int y) {
         boolean invalid = x < 0 || y < 0 || x > map.getWidth() || y > map.getHeight();
@@ -227,38 +227,72 @@ public class AStarPathFinder {
         return !invalid;
     }
 
+    /**
+     * Lấy Node đầu tiên trong tập open
+     * @return Node đầu tiên trong tập open
+     */
     private Node getFirstInOpen() {
         return (Node) open.peek();
     }
 
+    /**
+     * Kiểm tra một node có trong open hay không?
+     * @param node node cần check
+     * @return node có trong open không?
+     */
     private boolean inOpenList(Node node) {
         return node.isOpen();
     }
 
+    /**
+     * Thêm node mới vào tập open
+     * @param node cần thêm
+     */
     private void addToOpen(Node node) {
         node.setOpen(true);
         open.add(node);
     }
 
+    /**
+     * Xóa một node trong tập open
+     * @param node cần xóa
+     */
     private void removeFromOpen(Node node) {
         node.setOpen(false);
         open.remove(node);
     }
 
+    /**
+     * Thêm một node vào tập closed
+     * @param node cần thêm
+     */
     private void addToClosed(Node node) {
         node.setClosed(true);
         closed.add(node);
     }
 
+    /**
+     * Kiểm tra node có trong tập closed khônng?
+     * @param node cần check
+     * @return
+     */
     private boolean inClosedList(Node node) {
         return node.isClosed();
     }
 
+    /**
+     * Xóa một node khỏi tập closed
+     * @param node cần xóa
+     */
     private void removeFromClosed(Node node) {
         node.setClosed(false);
         closed.remove(node);
     }
 
+    /**
+     * Node - tượng trưng cho một ô trong board
+     * @author IMU Team
+     */
     private class Node implements Comparable {
         private int x, y;
         private float cost;
@@ -273,6 +307,11 @@ public class AStarPathFinder {
             this.y = y;
         }
 
+        /**
+         * Xác định Node trước đó trong đường đi
+         * @param parent node trước đó trong đường đi
+         * @return trọng số của node trong đường đi
+         */
         public int setParent(Node parent) {
             depth = parent.depth + 1;
             this.parent = parent;
@@ -280,6 +319,11 @@ public class AStarPathFinder {
             return depth;
         }
 
+        /**
+         * So sánh 2 node thông qua 'heuristic'
+         * @param other node còn lại
+         * @return
+         */
         public int compareTo(Object other) {
             if (!(other instanceof Node))
                 return -1;

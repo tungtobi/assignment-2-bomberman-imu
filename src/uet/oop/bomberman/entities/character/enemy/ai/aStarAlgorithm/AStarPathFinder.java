@@ -12,7 +12,7 @@ public class AStarPathFinder {
     private ArrayList<Node> closed = new ArrayList<Node>();
     private PriorityQueue<Node> open = new PriorityQueue<Node>();
     private TileMap map;
-    private int maxSearchDistance = 8;
+    private int maxSearchDistance = 18;
 
     private Node[][] nodes;
     private AStarHeuristic heuristic;

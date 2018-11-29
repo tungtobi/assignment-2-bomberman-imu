@@ -45,6 +45,7 @@ public class FileDataManager {
 
         Game.highscore = highscore;
         Game.maxLevel = level;
+        System.out.println(Game.maxLevel);
     }
 
     public void exportData() {

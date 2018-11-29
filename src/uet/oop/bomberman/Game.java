@@ -60,6 +60,8 @@ public class Game extends Canvas {
 	private int[] pixels = ((DataBufferInt)image.getRaster().getDataBuffer()).getData();
 	
 	public Game(Frame frame) {
+		loadData();
+
 		_frame = frame;
 		_frame.setTitle(TITLE);
 		
@@ -71,7 +73,6 @@ public class Game extends Canvas {
 		_board = new Board(this, _input, screen, _mode);
 		addKeyListener(_input);
 
-		loadData();
 	}
 
 	private void renderGame() {

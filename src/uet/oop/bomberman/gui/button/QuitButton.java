@@ -14,8 +14,6 @@ public class QuitButton extends Button {
     @Override
     public void actionPerformed(ActionEvent e) {
         onClickSound();
-        FileDataManager manager = new FileDataManager();
-        manager.exportData();
         System.exit(0);
     }
 }

@@ -1,6 +1,7 @@
 package uet.oop.bomberman;
 
 import uet.oop.bomberman.exceptions.GameException;
+import uet.oop.bomberman.input.FileDataManager;
 
 public class Main
 {

@@ -3,6 +3,7 @@ package uet.oop.bomberman.gui;
 import uet.oop.bomberman.BombermanGame;
 import uet.oop.bomberman.Game;
 import uet.oop.bomberman.audio.MyAudioPlayer;
+import uet.oop.bomberman.input.FileDataManager;
 
 import javax.swing.*;
 import java.awt.*;
@@ -36,9 +37,13 @@ public class Frame extends JFrame {
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		pack();
 		setLocationRelativeTo(null);
-		setVisible(true);	
-		
+		setVisible(true);
+		setIconImage(new ImageIcon(getClass().getResource("/images/icon.jpeg")).getImage());
+
+
 		_game.start();
+		FileDataManager manager = new FileDataManager();
+		manager.exportData();
 		dispose();
 	}
 

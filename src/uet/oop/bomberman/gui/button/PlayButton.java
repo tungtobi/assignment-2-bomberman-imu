@@ -7,7 +7,7 @@ import java.awt.event.ActionEvent;
 
 public class PlayButton extends Button {
     public PlayButton(Launcher game) {
-        super(game, "Adventure!");
+        super(game, "Adventure");
     }
 
     @Override

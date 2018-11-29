@@ -48,6 +48,8 @@ public class Launcher extends JFrame
         // Thiết lập cửa sổ menu
         createWindow();
 
+        createCloseButton();
+
         // Thiết lập panel hướng dẫn how to play
         createGuidePanel();
 
@@ -201,6 +203,8 @@ public class Launcher extends JFrame
         setLocation(dim.width / 2 - this.getSize().width / 2, dim.height / 2 - this.getSize().height / 2);
 
         setUndecorated(true);
+
+        setIconImage(new ImageIcon(getClass().getResource("/images/icon.jpeg")).getImage());
 
         getContentPane().setLayout(new AbsoluteLayout());
 

@@ -8,7 +8,7 @@ import java.awt.event.ActionEvent;
 
 public class AudioButton extends Button {
     public AudioButton(Launcher game) {
-        super(game, "Audio: " + !MyAudioPlayer.isMuted());
+        super(game, "Audio: " + (!MyAudioPlayer.isMuted()? "On" : "Off"));
     }
 
     @Override
@@ -19,6 +19,6 @@ public class AudioButton extends Button {
     }
 
     private void updateText() {
-        setText("Audio: " + !MyAudioPlayer.isMuted());
+        setText("Audio: " + (!MyAudioPlayer.isMuted()? "On" : "Off"));
     }
 }

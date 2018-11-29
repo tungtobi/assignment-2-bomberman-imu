@@ -31,7 +31,7 @@ public class BombermanGame
         //musicPlayer.loop();
 
         while (true) {
-//			System.out.println(state);
+			System.out.println();
 			if (state == State.SINGlE || state == State.MULTY) {
 				Frame mainwindow = new Frame(state);
 				state = State.MENU;

@@ -4,6 +4,7 @@ import sun.audio.AudioData;
 import sun.audio.AudioPlayer;
 import sun.audio.AudioStream;
 import sun.audio.ContinuousAudioDataStream;
+import uet.oop.bomberman.BombermanGame;
 
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
@@ -32,6 +33,8 @@ public class MyAudioPlayer implements Runnable {
     public static final String EXPLOSION = "explosion";
     public static final String DEAD = "dead";
     public static final String ENEMY_DEAD = "dead2";
+
+    private static boolean _muted = false;
 
     private Clip clip;
 
@@ -75,11 +78,16 @@ public class MyAudioPlayer implements Runnable {
     }
 
     public void play(){
-        clip.setFramePosition(0);  // Chạy từ đầu
-        clip.start();
+        if (!_muted) {
+            clip.setFramePosition(0);  // Chạy từ đầu
+            clip.start();
+        }
     }
+
     public void loop(){
-        clip.loop(Clip.LOOP_CONTINUOUSLY);
+        if (!_muted) {
+            clip.loop(Clip.LOOP_CONTINUOUSLY);
+        }
     }
     public void stop(){
         clip.stop();
@@ -95,5 +103,18 @@ public class MyAudioPlayer implements Runnable {
                 this.play();
                 break;
         }
+    }
+
+    public static void mute() {
+        _muted = !_muted;
+        if (_muted) {
+            BombermanGame.musicPlayer.stop();
+        } else {
+            BombermanGame.musicPlayer.loop();
+        }
+    }
+
+    public static boolean isMuted() {
+        return _muted;
     }
 }

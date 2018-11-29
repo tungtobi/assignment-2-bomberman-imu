@@ -2,6 +2,7 @@
 package uet.oop.bomberman.gui;
 
 import uet.oop.bomberman.BombermanGame;
+import uet.oop.bomberman.gui.button.AudioButton;
 import uet.oop.bomberman.gui.button.BackButton;
 import uet.oop.bomberman.gui.button.Button;
 import uet.oop.bomberman.gui.button.HowToPlayButton;
@@ -139,13 +140,16 @@ public class Launcher extends JFrame
 
     private void addButtonIntoMenu() {
         menuPanel.add(new QuitButton(this),
-                new AbsoluteConstraints(200, 500, Button.WIDTH, Button.HEIGHT));
+                new AbsoluteConstraints(200, 540, Button.WIDTH, Button.HEIGHT));
 
         menuPanel.add(new PlayButton(this),
                 new AbsoluteConstraints(200, 300, Button.WIDTH, Button.HEIGHT));
 
         menuPanel.add(new MultiPlayButton(this),
                 new AbsoluteConstraints(200, 360, Button.WIDTH, Button.HEIGHT));
+
+        menuPanel.add(new AudioButton(this),
+                new AbsoluteConstraints(200, 480, Button.WIDTH, Button.HEIGHT));
 
         menuPanel.add(new HowToPlayButton(this),
                 new AbsoluteConstraints(200, 420, Button.WIDTH, Button.HEIGHT));

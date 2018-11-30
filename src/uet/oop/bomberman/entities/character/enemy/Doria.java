@@ -12,8 +12,8 @@ import uet.oop.bomberman.graphics.Sprite;
 
 public class Doria extends SmartEnemy {
 
-	public Doria(int x, int y, Board board) {
-		super(x, y, board, Sprite.kondoria_dead, Game.getEnemySpeed() / 3, 200);
+	public Doria(char id, int x, int y, Board board) {
+		super(id, x, y, board, Sprite.kondoria_dead, Game.getEnemySpeed() / 3, 400);
 		
 		_sprite = Sprite.kondoria_left1;
 	}

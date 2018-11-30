@@ -9,6 +9,8 @@ import uet.oop.bomberman.entities.bomb.FlameSegment;
 import uet.oop.bomberman.entities.character.Bomber;
 import uet.oop.bomberman.entities.character.Character;
 import uet.oop.bomberman.entities.character.enemy.Doria;
+import uet.oop.bomberman.entities.character.enemy.Enemy;
+import uet.oop.bomberman.entities.character.enemy.Pass;
 import uet.oop.bomberman.entities.tile.Grass;
 import uet.oop.bomberman.entities.tile.Wall;
 import uet.oop.bomberman.entities.tile.destroyable.Brick;
@@ -27,6 +29,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import static uet.oop.bomberman.BombermanGame.musicPlayer;
+import static uet.oop.bomberman.entities.character.enemy.Enemy.EnemyId.*;
 
 /**
  * Quản lý thao tác điều khiển, load level, render các màn hình của game
@@ -230,11 +233,26 @@ public class Board implements IRender {
 	public boolean blockedAt(Character character, int x, int y) {
         Entity entity = getBlock(x, y);
 
+//        if (character instanceof Pass) {
+//            int radius = getBomber().getBombRadius();
+//            for (int i = y - radius; i <= y + radius; i++) {
+//                for (int j = x - radius; j <= x + radius; j++) {
+//                    if (getBlock(x, y) instanceof Bomb) {
+//                        return true;
+//                    }
+//                }
+//            }
+//        }
+
         if (entity instanceof LayeredEntity) {
             LayeredEntity layer = (LayeredEntity) entity;
             Entity topEntity = layer.getTopEntity();
             if (topEntity instanceof Brick) {
-                return !(character instanceof Doria);
+            	if (character instanceof Enemy) {
+            		Enemy enemy = (Enemy) character;
+            		Enemy.EnemyId id = enemy.getId();
+					return (id != DORIA && id != OVAPE && id != PONTAN);
+				}
             } else {
                 return false;
             }

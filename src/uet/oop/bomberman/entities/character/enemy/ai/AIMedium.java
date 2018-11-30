@@ -18,7 +18,7 @@ public class AIMedium extends AI {
 	    _bomber = bomber;
 	    _board = board;
 	    _map = new TileMap(board, e);
-	    _pathFinder = new AStarPathFinder(_map);
+	    _pathFinder = new AStarPathFinder(_map, e);
 	}
 
 	@Override
@@ -37,6 +37,9 @@ public class AIMedium extends AI {
         }
 
         Direction direction = _pathFinder.findPath(_e, sx, sy, tx, ty);
+        if (_board.getInput().vk_j) {
+            _map.display();
+        }
 
         return direction;
 	}

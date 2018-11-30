@@ -7,8 +7,8 @@ import uet.oop.bomberman.graphics.Sprite;
 
 public abstract class SmartEnemy extends Enemy {
 
-    public SmartEnemy(int x, int y, Board board, Sprite dead, double speed, int points) {
-        super(x, y, board, dead, speed, points);
+    public SmartEnemy(char id, int x, int y, Board board, Sprite dead, double speed, int points) {
+        super(id, x, y, board, dead, speed, points);
         _ai = new AIMedium(_board, _board.getBomber(), this);
         _direction  = _ai.randomDirection();
     }

@@ -9,8 +9,8 @@ import uet.oop.bomberman.graphics.Sprite;
 
 public class Oneal extends SmartEnemy {
 	
-	public Oneal(int x, int y, Board board) {
-		super(x, y, board, Sprite.oneal_dead, Game.getEnemySpeed() * 0.75, 200);
+	public Oneal(char id, int x, int y, Board board) {
+		super(id, x, y, board, Sprite.oneal_dead, Game.getEnemySpeed() * 0.75, 200);
 		_sprite = Sprite.oneal_left1;
 	}
 

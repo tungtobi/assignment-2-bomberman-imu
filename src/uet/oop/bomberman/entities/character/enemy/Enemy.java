@@ -36,6 +36,8 @@ public abstract class Enemy extends Character {
 	
 	protected int _finalAnimation = 30;
 	protected Sprite _deadSprite;
+
+	private EnemyId _id;
 	
 	public Enemy(int x, int y, Board board, Sprite dead, double speed, int points) {
 		super(x, y, board);
@@ -50,6 +52,11 @@ public abstract class Enemy extends Character {
 		_timeAfter = 20;
 		_deadSprite = dead;
 	}
+
+	public Enemy(char id, int x, int y, Board board, Sprite dead, double speed, int points) {
+	    this(x, y, board, dead, speed, points);
+	    setId(id);
+    }
 	
 	@Override
 	public void update() {
@@ -183,5 +190,42 @@ public abstract class Enemy extends Character {
 
     public void addSpeed() {
         _speed += 0.2;
+    }
+
+    public void setId(char id) {
+        switch (id) {
+            case '1':
+                _id = EnemyId.BALLOON;
+                break;
+            case '2':
+                _id = EnemyId.ONEAL;
+                break;
+            case '3':
+                _id = EnemyId.DALL;
+                break;
+            case '4':
+                _id = EnemyId.MINVO;
+                break;
+            case '5':
+                _id = EnemyId.DORIA;
+                break;
+            case '6':
+                _id = EnemyId.OVAPE;
+                break;
+            case '7':
+                _id = EnemyId.PONTAN;
+                break;
+            case '8':
+                _id = EnemyId.PASS;
+                break;
+        }
+    }
+
+    public EnemyId getId() {
+        return _id;
+    }
+
+    public enum EnemyId {
+        NONE, BALLOON, ONEAL, DALL, MINVO, DORIA, OVAPE, PONTAN, PASS
     }
 }

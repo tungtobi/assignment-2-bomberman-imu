@@ -9,8 +9,8 @@ import uet.oop.bomberman.graphics.Sprite;
 
 public class Pass extends SmartEnemy {
 
-	public Pass(int x, int y, Board board) {
-		super(x, y, board, Sprite.pass_dead, Game.getEnemySpeed(), 200);
+	public Pass(char id, int x, int y, Board board) {
+		super(id, x, y, board, Sprite.pass_dead, Game.getEnemySpeed(), 800);
 		
 		_sprite = Sprite.pass_left1;
 	}

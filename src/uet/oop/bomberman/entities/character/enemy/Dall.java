@@ -3,15 +3,19 @@ package uet.oop.bomberman.entities.character.enemy;
 
 import uet.oop.bomberman.Board;
 import uet.oop.bomberman.Game;
+import uet.oop.bomberman.entities.character.enemy.ai.AILow;
 import uet.oop.bomberman.entities.character.enemy.ai.AIMedium;
 import uet.oop.bomberman.graphics.Sprite;
 
-public class Dall extends SmartEnemy {
+public class Dall extends Enemy {
 
-	public Dall(int x, int y, Board board) {
-		super(x, y, board, Sprite.dall_dead, Game.getEnemySpeed(), 200);
-		
+	public Dall(char id, int x, int y, Board board) {
+		super(id, x, y, board, Sprite.dall_dead, Game.getEnemySpeed() * 0.75, 200);
+
 		_sprite = Sprite.dall_left1;
+
+		_ai = new AILow(this);
+		_direction = _ai.calculateDirection();
 	}
 
     @Override

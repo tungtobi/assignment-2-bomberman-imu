@@ -1,6 +1,7 @@
 package uet.oop.bomberman.entities.character.enemy.ai.aStarAlgorithm;
 
 import uet.oop.bomberman.entities.character.enemy.Enemy;
+import uet.oop.bomberman.entities.character.enemy.Oneal;
 import uet.oop.bomberman.entities.character.movement.Direction;
 import uet.oop.bomberman.level.Coordinates;
 
@@ -12,7 +13,7 @@ public class AStarPathFinder {
     private ArrayList<Node> closed = new ArrayList<Node>();
     private PriorityQueue<Node> open = new PriorityQueue<Node>();
     private TileMap map;
-    private int maxSearchDistance = 18;
+    private int maxSearchDistance = 15;
 
     private Node[][] nodes;
     private AStarHeuristic heuristic;
@@ -22,9 +23,28 @@ public class AStarPathFinder {
     private int sourceX, sourceY;
     private int distance;
 
-    public AStarPathFinder(TileMap map) {
+    public AStarPathFinder(TileMap map, Enemy enemy) {
         heuristic = new AStarHeuristic();
         this.map = map;
+
+        switch (enemy.getId()) {
+            case ONEAL:
+            case MINVO:
+                maxSearchDistance = 15;
+                break;
+            case DORIA:
+            case OVAPE:
+                maxSearchDistance = 15;
+                break;
+            case PONTAN:
+            case PASS:
+                maxSearchDistance = 10;
+                break;
+            default:
+                maxSearchDistance = 0;
+                break;
+
+        }
 
         // Thiết lập tập các node từ bản đồ Tile map
         nodes = new Node[map.getHeight()][map.getWidth()];

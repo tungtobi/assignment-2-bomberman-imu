@@ -137,16 +137,16 @@ public class Sprite {
 	
 	public static Sprite kondoria_dead = new Sprite(16, 10, 8, SpriteSheet.tiles, 16, 16);
 
-	//Ovape
-	public static Sprite ovape_left1 = new Sprite(16, 12, 5, SpriteSheet.tiles, 16, 16);
-	public static Sprite ovape_left2 = new Sprite(16, 12, 6, SpriteSheet.tiles, 16, 16);
-	public static Sprite ovape_left3 = new Sprite(16, 12, 7, SpriteSheet.tiles, 16, 16);
+	//Pass
+	public static Sprite pass_left1 = new Sprite(16, 4, 5, SpriteSheet.tiles, 16, 16);
+	public static Sprite pass_left2 = new Sprite(16, 4, 6, SpriteSheet.tiles, 16, 16);
+	public static Sprite pass_left3 = new Sprite(16, 4, 7, SpriteSheet.tiles, 16, 16);
 
-	public static Sprite ovape_right1 = new Sprite(16, 13, 5, SpriteSheet.tiles, 16, 16);
-	public static Sprite ovape_right2 = new Sprite(16, 13, 6, SpriteSheet.tiles, 16, 16);
-	public static Sprite ovape_right3 = new Sprite(16, 13, 7, SpriteSheet.tiles, 16, 16);
+	public static Sprite pass_right1 = new Sprite(16, 5, 5, SpriteSheet.tiles, 16, 16);
+	public static Sprite pass_right2 = new Sprite(16, 5, 6, SpriteSheet.tiles, 16, 16);
+	public static Sprite pass_right3 = new Sprite(16, 5, 7, SpriteSheet.tiles, 16, 16);
 
-	public static Sprite ovape_dead = new Sprite(16, 12, 8, SpriteSheet.tiles, 16, 16);
+	public static Sprite pass_dead = new Sprite(16, 4, 8, SpriteSheet.tiles, 16, 16);
 
 	//Pontan
 	public static Sprite pontan_left1 = new Sprite(16, 14, 5, SpriteSheet.tiles, 16, 16);
@@ -159,16 +159,16 @@ public class Sprite {
 
 	public static Sprite pontan_dead = new Sprite(16, 14, 8, SpriteSheet.tiles, 16, 16);
 
-	//Pass
-	public static Sprite pass_left1 = new Sprite(16, 6, 5, SpriteSheet.tiles, 16, 16);
-	public static Sprite pass_left2 = new Sprite(16, 6, 6, SpriteSheet.tiles, 16, 16);
-	public static Sprite pass_left3 = new Sprite(16, 6, 7, SpriteSheet.tiles, 16, 16);
+	//Ovape
+	public static Sprite ovape_left1 = new Sprite(16, 6, 5, SpriteSheet.tiles, 16, 16);
+	public static Sprite ovape_left2 = new Sprite(16, 6, 6, SpriteSheet.tiles, 16, 16);
+	public static Sprite ovape_left3 = new Sprite(16, 6, 7, SpriteSheet.tiles, 16, 16);
 
-	public static Sprite pass_right1 = new Sprite(16, 7, 5, SpriteSheet.tiles, 16, 16);
-	public static Sprite pass_right2 = new Sprite(16, 7, 6, SpriteSheet.tiles, 16, 16);
-	public static Sprite pass_right3 = new Sprite(16, 7, 7, SpriteSheet.tiles, 16, 16);
+	public static Sprite ovape_right1 = new Sprite(16, 7, 5, SpriteSheet.tiles, 16, 16);
+	public static Sprite ovape_right2 = new Sprite(16, 7, 6, SpriteSheet.tiles, 16, 16);
+	public static Sprite ovape_right3 = new Sprite(16, 7, 7, SpriteSheet.tiles, 16, 16);
 
-	public static Sprite pass_dead = new Sprite(16, 16, 8, SpriteSheet.tiles, 16, 16);
+	public static Sprite ovape_dead = new Sprite(16, 16, 8, SpriteSheet.tiles, 16, 16);
 
 
 	//ALL

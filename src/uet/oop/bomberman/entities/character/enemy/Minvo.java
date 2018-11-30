@@ -8,8 +8,8 @@ import uet.oop.bomberman.graphics.Sprite;
 
 public class Minvo extends SmartEnemy {
 
-	public Minvo(int x, int y, Board board) {
-		super(x, y, board, Sprite.minvo_dead, Game.getEnemySpeed(), 200);
+	public Minvo(char id, int x, int y, Board board) {
+		super(id, x, y, board, Sprite.minvo_dead, Game.getEnemySpeed(), 400);
 		
 		_sprite = Sprite.minvo_left1;
 	}

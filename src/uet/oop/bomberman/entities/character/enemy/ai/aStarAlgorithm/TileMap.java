@@ -36,7 +36,7 @@ public class TileMap {
     /**
      * Hiển thị bản đồ
      */
-    private void display() {
+    public void display() {
         for (int y = 0; y < height; y++) {
             for (int x = 0; x < width; x++) {
                 System.out.print(map[y][x]);
